@@ -1,0 +1,3 @@
+[submodule "submodules/network-diffusion"]
+	path = submodules/network-diffusion
+	url = https://github.com/anty-filidor/network_diffusion
