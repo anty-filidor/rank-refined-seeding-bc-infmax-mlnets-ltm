@@ -1,0 +1,23 @@
+============================================
+Multilayer Linear Threshold Model
+--------------------------------------------
+============================================
+compartmental model
+--------------------------------------------
+processes, their states and initial sizes:
+	'MLTM': [0:70%, 1:30%]
+--------------------------------------------
+process 'MLTM' transitions with nonzero weight:
+	from 0 to 1 with probability 0.4 and constrains []
+========================================================================================
+seed selection method
+--------------------------------------------
+	K Shell decomposition
+============================================
+============================================
+auxiliary parameters
+--------------------------------------------
+	protocole: _protocol_or
+	active state abbreviation: 1
+	inactive state abbreviation: 0
+============================================

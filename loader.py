@@ -3,8 +3,7 @@ import network_diffusion as nd
 net = nd.MultilayerNetwork.load_mlx(file_path="data/aucs.mpx")
 
 mltm = nd.models.MLTModel(
-    layers=list(net.layers.keys()),
-    protocol="AND",
+    protocol="OR",
     seed_selector=nd.seeding.KShellSeedSelector(),
     seeding_budget = (70, 30),
     mi_value=0.4,
