@@ -14,3 +14,19 @@ http://konect.cc/networks/
 
 
 https://networks.skewed.de/
+
+
+# Config runtime
+
+git submodule update --init --recursive
+
+conda create --name ltm-seeding-mln python=3.10
+conda activate ltm-seeding-mln
+pip install -r submodules/network-diffusion/requirements/production.txt
+
+
+### Unix
+ln -s network_diffusion submodules/network-diffusion/network_diffusion
+
+### Windows
+mklink /J .\network_diffusion .\submodules\network-diffusion\network_diffusion
