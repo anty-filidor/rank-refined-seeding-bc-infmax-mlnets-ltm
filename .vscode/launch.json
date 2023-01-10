@@ -12,16 +12,5 @@
             "console": "integratedTerminal",
             "justMyCode": true
         },
-        {
-            "name": "Loader",
-            "type": "python",
-            "request": "launch",
-            "program": "loader.py",
-            "console": "integratedTerminal",
-            "justMyCode": true,
-            "env": {
-                "PYTHONPATH": "${workspaceFolder}/submodules/network-diffusion"
-            },
-        }
     ]
 }
