@@ -9,12 +9,11 @@ from tqdm import tqdm
 from utils import *
 
 
-set_seed(43)
-block_prints()
+set_seed(43)  # repeat for random 20 times
 
 FULL_LOGS_FREQ = 20
 MAX_EPOCHS_NUM = 1000
-OUT_DIR = Path("./experiments/degree_centrality")
+OUT_DIR = Path("./experiments/k_sheel_mcz")
 OUT_DIR.mkdir(exist_ok=True, parents=True)
 
 protocols = ("OR", "AND")
@@ -31,11 +30,15 @@ networks = {
     "sf2": get_sf2_network(),
     "sf3": get_sf3_network(),
     "sf5": get_sf5_network(),
+    # consider adding arxive
 }
 
 global_stats_handler = pd.DataFrame(data={})
 experiments = itertools.product(protocols, seeding_budgets, mi_values, networks)
 p_bar = tqdm(list(experiments), desc="main loop", leave=False, colour="green")
+
+print(f"Experiments started at {get_current_time()}")
+block_prints()
 
 for idx, investigated_case in enumerate(p_bar):
 
@@ -55,7 +58,7 @@ for idx, investigated_case in enumerate(p_bar):
     # initialise model
     mltm = nd.models.MLTModel(
         protocol=protocol,
-        seed_selector=nd.seeding.DegreeCentralitySelector(),
+        seed_selector=nd.seeding.KShellSeedSelector(),
         seeding_budget = seeding_budget,
         mi_value=mi_value,
     )
@@ -75,6 +78,7 @@ for idx, investigated_case in enumerate(p_bar):
             case_dir.mkdir(exist_ok=True)
             logs.report(path=str(case_dir))
     except:
+        # print corrupted case 
         diffusion_len, activ_actors_prct = None, None
         print("Ooops something went wrong!")
 
@@ -86,11 +90,16 @@ for idx, investigated_case in enumerate(p_bar):
         "mi_value": mi_value,
         "diffusion_len": diffusion_len,
         "activated_prct_actors": activ_actors_prct
+        # add seed selection strategy
     }
     global_stats_handler = pd.concat(
         [global_stats_handler, pd.DataFrame.from_records([case])],
         ignore_index=True,
+        axis=0,
     )
 
 
 global_stats_handler.to_csv(OUT_DIR.joinpath("results.csv"))
+
+enable_prints()
+print(f"Experiments finished at {get_current_time()}")

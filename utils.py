@@ -1,3 +1,4 @@
+import datetime
 import os
 import random
 import sys
@@ -34,3 +35,10 @@ def extract_basic_stats(logal_stats):
 
 def block_prints():
     sys.stdout = open(os.devnull, 'w')
+
+def enable_prints():
+    sys.stdout = sys.__stdout__
+
+def get_current_time():
+    now = datetime.datetime.now()
+    return now.strftime("%H:%M:%S")
