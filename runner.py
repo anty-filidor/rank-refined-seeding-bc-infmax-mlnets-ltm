@@ -1,9 +1,9 @@
 import itertools
-from pathlib import Path
 
 import network_diffusion as nd
 import numpy as np
 import pandas as pd
+
 from loader import *
 from tqdm import tqdm
 from utils import *
@@ -11,15 +11,11 @@ from utils import *
 
 set_seed(43)  # repeat for random 20 times
 
-FULL_LOGS_FREQ = 20
-MAX_EPOCHS_NUM = 1000
-OUT_DIR = Path("./experiments/k_sheel_mcz")
-OUT_DIR.mkdir(exist_ok=True, parents=True)
-
-protocols = ("OR", "AND")
-seeding_budgets = [(100 - i, i) for i in np.logspace(0, 2, num=15).round(2)]
-mi_values = np.linspace(0.1, 1, num=10)
-networks = {
+SEED_SELECTOR = nd.seeding.RandomSeedSelector()
+PROTOCOLS = ("OR", "AND")
+SEEDING_BUDGETS = [(100 - i, i) for i in np.logspace(0, 2, num=15).round(2)]
+MI_VALUES = np.linspace(0.1, 1, num=10)
+NETWORKS = {
     "aucs": get_aucs_network(),
     "ckm_physicians": get_ckm_physicians_network(),
     "eu_transportation": get_eu_transportation_network(),
@@ -30,11 +26,15 @@ networks = {
     "sf2": get_sf2_network(),
     "sf3": get_sf3_network(),
     "sf5": get_sf5_network(),
-    # consider adding arxive
 }
 
+FULL_LOGS_FREQ = 20
+MAX_EPOCHS_NUM = 1000
+OUT_DIR = prepare_out_path_for_selector(SEED_SELECTOR)
+
+
 global_stats_handler = pd.DataFrame(data={})
-experiments = itertools.product(protocols, seeding_budgets, mi_values, networks)
+experiments = itertools.product(PROTOCOLS, SEEDING_BUDGETS, MI_VALUES, NETWORKS)
 p_bar = tqdm(list(experiments), desc="main loop", leave=False, colour="green")
 
 print(f"Experiments started at {get_current_time()}")
@@ -42,11 +42,11 @@ block_prints()
 
 for idx, investigated_case in enumerate(p_bar):
 
-    # obtain parameters of the test
+    # obtain parameters of the propagation scenario
     protocol = investigated_case[0]
     seeding_budget = investigated_case[1]
     mi_value = investigated_case[2]
-    network = networks[investigated_case[3]]
+    network = NETWORKS[investigated_case[3]]
 
     # update progress_bar
     case_name = (
@@ -58,7 +58,7 @@ for idx, investigated_case in enumerate(p_bar):
     # initialise model
     mltm = nd.models.MLTModel(
         protocol=protocol,
-        seed_selector=nd.seeding.KShellSeedSelector(),
+        seed_selector=SEED_SELECTOR,
         seeding_budget = seeding_budget,
         mi_value=mi_value,
     )
@@ -90,7 +90,6 @@ for idx, investigated_case in enumerate(p_bar):
         "mi_value": mi_value,
         "diffusion_len": diffusion_len,
         "activated_prct_actors": activ_actors_prct
-        # add seed selection strategy
     }
     global_stats_handler = pd.concat(
         [global_stats_handler, pd.DataFrame.from_records([case])],

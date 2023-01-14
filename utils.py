@@ -3,7 +3,10 @@ import os
 import random
 import sys
 
+from pathlib import Path
+
 import numpy as np
+import network_diffusion as nd
 
 
 def set_seed(seed):
@@ -42,3 +45,21 @@ def enable_prints():
 def get_current_time():
     now = datetime.datetime.now()
     return now.strftime("%H:%M:%S")
+
+def prepare_out_path_for_selector(selector):
+    if isinstance(selector, nd.seeding.DegreeCentralitySelector):
+        out_path = Path("./experiments/degree_centrality")
+    elif isinstance(selector, nd.seeding.KShellSeedSelector):
+        out_path = Path("./experiments/k_sheel_mcz")
+    elif isinstance(selector, nd.seeding.NeighbourhoodSizeSelector):
+        out_path = Path("./experiments/neighbourhood_size")
+    elif isinstance(selector, nd.seeding.PageRankSeedSelector):
+        out_path = Path("./experiments/page_rank")
+    elif isinstance(selector, nd.seeding.RandomSeedSelector):
+        out_path = Path("./experiments/random")
+    elif isinstance(selector, nd.seeding.VoteRankSeedSelector):
+        out_path = Path("./experiments/vote_rank")
+    else:
+        raise ValueError(f"{selector} is not a valid seed selector!")
+    out_path.mkdir(exist_ok=True, parents=True)
+    return out_path
