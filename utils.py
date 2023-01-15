@@ -16,7 +16,7 @@ def set_seed(seed):
     os.environ["PYTHONHASHSEED"] = str(seed)
 
 
-def extract_basic_stats(logal_stats):
+def extract_basic_stats(logal_stats, patience):
     """Get last epoch when diffusion took place and final coverage."""
 
     length_of_diffusion = 0
@@ -24,7 +24,9 @@ def extract_basic_stats(logal_stats):
 
     for epoch_num, epoch_changes in logal_stats.items():
         if len(epoch_changes) > 0:
-            length_of_diffusion = int(epoch_num) + 1 # because of seeding epoch
+            # +1 for seeding epoch
+            # -patience for epochs when no propagation was observed
+            length_of_diffusion = int(epoch_num) + 1 - patience
         for node in epoch_changes:
             if node["new_state"] == "1":
                 activated_nodes_list.append(node['node_name'])

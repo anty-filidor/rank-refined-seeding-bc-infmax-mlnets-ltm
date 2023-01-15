@@ -11,7 +11,7 @@ from utils import *
 
 set_seed(43)  # repeat for random 20 times
 
-SEED_SELECTOR = nd.seeding.RandomSeedSelector()
+SEED_SELECTOR = nd.seeding.KShellSeedSelector()
 PROTOCOLS = ("OR", "AND")
 SEEDING_BUDGETS = [(100 - i, i) for i in np.logspace(0, 2, num=15).round(2)]
 MI_VALUES = np.linspace(0.1, 1, num=10)
@@ -30,15 +30,14 @@ NETWORKS = {
 
 FULL_LOGS_FREQ = 20
 MAX_EPOCHS_NUM = 1000
+PATIENCE = 1
 OUT_DIR = prepare_out_path_for_selector(SEED_SELECTOR)
-
 
 global_stats_handler = pd.DataFrame(data={})
 experiments = itertools.product(PROTOCOLS, SEEDING_BUDGETS, MI_VALUES, NETWORKS)
 p_bar = tqdm(list(experiments), desc="main loop", leave=False, colour="green")
 
 print(f"Experiments started at {get_current_time()}")
-block_prints()
 
 for idx, investigated_case in enumerate(p_bar):
 
@@ -63,24 +62,27 @@ for idx, investigated_case in enumerate(p_bar):
         mi_value=mi_value,
     )
 
-    # run experiment and obtain data that intetrests us
     try:
+        # tun experiment
         experiment = nd.MultiSpreading(model=mltm, network=network)
         logs = experiment.perform_propagation(
-            n_epochs=MAX_EPOCHS_NUM, stop_on_hold=True
+            n_epochs=MAX_EPOCHS_NUM, patience=PATIENCE
         )
 
-        diffusion_len, activ_actors = extract_basic_stats(logs._local_stats)
+        # obtain global data and if case is even local one as well
+        diffusion_len, activ_actors = extract_basic_stats(
+            logal_stats=logs._local_stats, patience=PATIENCE
+        )
         activ_actors_prct = activ_actors / network.get_actors_num() * 100
-
         if idx % FULL_LOGS_FREQ == 0:
             case_dir = OUT_DIR.joinpath(f"{idx}-{case_name}")
             case_dir.mkdir(exist_ok=True)
             logs.report(path=str(case_dir))
+
     except:
         # print corrupted case 
         diffusion_len, activ_actors_prct = None, None
-        print("Ooops something went wrong!")
+        print(f"Ooops something went wrong for case: {case_name}")
 
     # update global logs
     case = {
@@ -100,5 +102,4 @@ for idx, investigated_case in enumerate(p_bar):
 
 global_stats_handler.to_csv(OUT_DIR.joinpath("results.csv"))
 
-enable_prints()
 print(f"Experiments finished at {get_current_time()}")
