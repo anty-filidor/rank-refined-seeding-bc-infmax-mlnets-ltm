@@ -38,21 +38,27 @@ def extract_basic_stats(logal_stats, patience):
 
     return length_of_diffusion, activated_actors
 
+
 def block_prints():
     sys.stdout = open(os.devnull, 'w')
 
+
 def enable_prints():
     sys.stdout = sys.__stdout__
+
 
 def get_current_time():
     now = datetime.datetime.now()
     return now.strftime("%H:%M:%S")
 
+
 def prepare_out_path_for_selector(selector):
     if isinstance(selector, nd.seeding.DegreeCentralitySelector):
         out_path = Path("./experiments/degree_centrality")
     elif isinstance(selector, nd.seeding.KShellSeedSelector):
-        out_path = Path("./experiments/k_sheel_mcz")
+        out_path = Path("./experiments/k_sheel")
+    elif isinstance(selector, nd.seeding.KShellExtendedSeedSelector):
+        out_path = Path("./experiments/k_sheel_actorwise")
     elif isinstance(selector, nd.seeding.NeighbourhoodSizeSelector):
         out_path = Path("./experiments/neighbourhood_size")
     elif isinstance(selector, nd.seeding.PageRankSeedSelector):
@@ -65,3 +71,24 @@ def prepare_out_path_for_selector(selector):
         raise ValueError(f"{selector} is not a valid seed selector!")
     out_path.mkdir(exist_ok=True, parents=True)
     return out_path
+
+
+# TODO: determine how many times repeat experiments for following selectors
+def determine_repetitions_for_selector(selector):
+    if isinstance(selector, nd.seeding.DegreeCentralitySelector):
+        repeats = 1
+    elif isinstance(selector, nd.seeding.KShellSeedSelector):
+        repeats = 1
+    elif isinstance(selector, nd.seeding.KShellExtendedSeedSelector):
+        repeats = 7
+    elif isinstance(selector, nd.seeding.NeighbourhoodSizeSelector):
+        repeats = 1
+    elif isinstance(selector, nd.seeding.PageRankSeedSelector):
+        repeats = 1
+    elif isinstance(selector, nd.seeding.RandomSeedSelector):
+        repeats = 10
+    elif isinstance(selector, nd.seeding.VoteRankSeedSelector):
+        repeats = 1
+    else:
+        raise ValueError(f"{selector} is not a valid seed selector!")
+    return repeats
