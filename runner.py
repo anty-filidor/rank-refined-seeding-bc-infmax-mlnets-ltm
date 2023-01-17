@@ -13,8 +13,10 @@ from utils import *
 
 SEED_SELECTOR = nd.seeding.RandomSeedSelector()
 PROTOCOLS = ("OR", "AND")
-SEEDING_BUDGETS = [(100 - i, i) for i in np.logspace(0, 2, num=15).round(2)]
-MI_VALUES = np.linspace(0.1, 1, num=10)
+SEEDING_BUDGETS = [
+    (100 - i, i) for i in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30]
+]
+MI_VALUES = np.linspace(0.1, 0.9, num=9)
 NETWORKS = {
     "aucs": get_aucs_network(),
     "ckm_physicians": get_ckm_physicians_network(),
@@ -75,10 +77,12 @@ for idx, investigated_case in enumerate(p_bar):
             )
 
             # obtain global data and if case is even local one as well
-            diffusion_len, activ_actors = extract_basic_stats(
-                logal_stats=logs._local_stats, patience=PATIENCE
+            diffusion_len, active_actors, seed_actors = extract_basic_stats(
+                detailed_logs=logs._local_stats, patience=PATIENCE
             )
-            activ_actors_prct = activ_actors / network.get_actors_num() * 100
+            active_actors_prct = active_actors / network.get_actors_num() * 100
+            seed_actors_prct = seed_actors / network.get_actors_num() * 100
+            gain = compute_gain(seed_actors_prct, active_actors_prct)
             if idx % FULL_LOGS_FREQ == 0:
                 case_dir = OUT_DIR.joinpath(f"{idx}-{case_name}")
                 case_dir.mkdir(exist_ok=True)
@@ -86,7 +90,10 @@ for idx, investigated_case in enumerate(p_bar):
 
         except:
             # print corrupted case 
-            diffusion_len, activ_actors_prct = None, None
+            diffusion_len = None
+            active_actors_prct = None
+            seed_actors_prct = None
+            gain = None
             print(f"Ooops something went wrong for case: {case_name}")
 
         # update global logs
@@ -95,9 +102,11 @@ for idx, investigated_case in enumerate(p_bar):
             "protocol": protocol,
             "seeding_budget": seeding_budget[1],
             "mi_value": mi_value,
-            "diffusion_len": diffusion_len,
-            "activated_prct_actors": activ_actors_prct,
             "repetition_run": repetition,
+            "diffusion_len": diffusion_len,
+            "active_actors_prct": active_actors_prct,
+            "seed_actors_prct": seed_actors_prct,
+            "gain": gain,
         }
         global_stats_handler = pd.concat(
             [global_stats_handler, pd.DataFrame.from_records([case])],

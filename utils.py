@@ -16,27 +16,42 @@ def set_seed(seed):
     os.environ["PYTHONHASHSEED"] = str(seed)
 
 
-def extract_basic_stats(logal_stats, patience):
-    """Get last epoch when diffusion took place and final coverage."""
-
+def extract_basic_stats(detailed_logs, patience):
+    """Get length of diffusion, real number of seeds and final coverage."""
     length_of_diffusion = 0
-    activated_nodes_list = []
+    active_nodes_list = []
+    seed_nodes_list = []
 
-    for epoch_num, epoch_changes in logal_stats.items():
+    for epoch_num, epoch_changes in detailed_logs.items():
+        epoch_num = int(epoch_num)
+
         if len(epoch_changes) > 0:
             # +1 for seeding epoch
             # -patience for epochs when no propagation was observed
-            length_of_diffusion = int(epoch_num) + 1 - patience
+            length_of_diffusion = epoch_num + 1 - patience
+    
+        acviated_nodes = []
         for node in epoch_changes:
             if node["new_state"] == "1":
-                activated_nodes_list.append(node['node_name'])
+                acviated_nodes.append(node['node_name'])
             else:  # sanity check to detect leaks when nodes gets deactivated
-                if int(epoch_num) > 0:
+                if epoch_num > 0:
                     raise AttributeError("Results contradict themselves!")
+        
+        active_nodes_list.extend(acviated_nodes)
+        if epoch_num == 0:
+            seed_nodes_list.extend(acviated_nodes)
 
-    activated_actors = len(set(activated_nodes_list))
+    active_actors_num = len(set(active_nodes_list))
+    seed_actors_num = len(set(seed_nodes_list))
 
-    return length_of_diffusion, activated_actors
+    return length_of_diffusion, active_actors_num, seed_actors_num
+
+
+def compute_gain(seeds_prct, coverage_prct):
+    max_available_gain = 100 - seeds_prct
+    obtained_gain = coverage_prct - seeds_prct
+    return 100 * obtained_gain / max_available_gain
 
 
 def block_prints():
@@ -84,9 +99,9 @@ def determine_repetitions_for_selector(selector):
     elif isinstance(selector, nd.seeding.NeighbourhoodSizeSelector):
         repeats = 1
     elif isinstance(selector, nd.seeding.PageRankSeedSelector):
-        repeats = 1
+        repeats = 1 # TODO: sort by layer size
     elif isinstance(selector, nd.seeding.RandomSeedSelector):
-        repeats = 10
+        repeats = 20
     elif isinstance(selector, nd.seeding.VoteRankSeedSelector):
         repeats = 1
     else:
