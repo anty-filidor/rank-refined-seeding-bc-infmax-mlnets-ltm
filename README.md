@@ -1,22 +1,17 @@
-# ltm-seeding-mln
-Repository for experiments on seeding methods for linear threshold model on multilayer networks
+# LTM seeding for MLN
 
+Repository for experiments on seed selection methods for multilayer linear 
+threshold model.
 
-# repo with ICM experiments
-https://github.com/pbrodka/SQ4MLN
+Authors: Michał Czuba, Piotr Bródka  
+Affiliation: Wrocław University of Science and Technology, Poland
 
-# DATA
-AUCS | http://multilayer.it.uu.se/datasets.html; other sources https://networks.skewed.de/net/cs_department, https://github.com/pbrodka/SQ4MLN/tree/master/FullNet
-Ckm Physicians Innovation | https://figshare.com/articles/dataset/CKM-Physicians-Innovation_Multiplex_Social/21545784
-EU Transportation | http://complex.unizar.es/~atnmultiplex/, https://networks.skewed.de/net/eu_airlines
-Lazega Law Firm | https://networks.skewed.de/net/law_firm, http://elazega.fr/?page_id=609, https://search.r-project.org/CRAN/refmans/sand/html/lazega.html
-http://konect.cc/networks/
+## Data
 
+Used networks come from repository with experiments on ICM model: 
+https://github.com/pbrodka/SQ4MLN.
 
-https://networks.skewed.de/
-
-
-## Config runtime
+## Configuration of the runtime
 
 `git submodule update --init --recursive`
 
@@ -27,12 +22,26 @@ https://networks.skewed.de/
 `python -m ipykernel install --user --name=ltm-seeding-mln`
 
 ### Unix
+
 `ln -s network_diffusion submodules/network-diffusion/network_diffusion`
 
 ### Windows
+
 `mklink /J .\network_diffusion .\submodules\network-diffusion\network_diffusion`
 
 
-## Execute experiments
+## Executing experiments
 
-`python runner.py`
+To run experiments with "classic" seeding methods: `python runner.py` and update
+`SEED_SELECTOR` variable (in the beginning of the script) with seed selection
+class that is supported (full list is in `utils.py`).  
+
+Experiments on greedy algorithms are defined in `greedy_runner.py` due to its
+"hacky" nature.
+
+These two scripts store results in `./experiments` directory. In order to
+concatenate them use `postprocessing.ipynb` notebook that will procide an 
+aggregated file: `./experiments/all_results.csv`
+
+If reproducible run is needed please uncomment `set_seed` method invocation in
+scripts.
