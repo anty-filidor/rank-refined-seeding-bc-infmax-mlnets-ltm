@@ -8,13 +8,13 @@ def _network_from_pandas(path):
     net_dict = {l_name: nx.Graph() for l_name in [*df["layer"].unique()]}
     for _, row in df.iterrows():
         net_dict[row["layer"]].add_edge(row["node_1"], row["node_2"])
-    return nd.MultilayerNetwork.load_layers_nx(
+    return nd.MultilayerNetwork.from_nx_layers(
         layer_names=[*net_dict.keys()], network_list=[*net_dict.values()]
     )
 
 
 def get_aucs_network():
-    return nd.MultilayerNetwork.load_mpx(file_path="data/aucs.mpx")
+    return nd.MultilayerNetwork.from_mpx(file_path="data/aucs.mpx")
 
 
 def get_ckm_physicians_network():
@@ -36,24 +36,24 @@ def get_lazega_network():
 
 
 def get_er2_network():
-    return nd.MultilayerNetwork.load_mpx(file_path="data/er_2.mpx")
+    return nd.MultilayerNetwork.from_mpx(file_path="data/er_2.mpx")
 
 
 def get_er3_network():
-    return nd.MultilayerNetwork.load_mpx(file_path="data/er_3.mpx")
+    return nd.MultilayerNetwork.from_mpx(file_path="data/er_3.mpx")
 
 
 def get_er5_network():
-    return nd.MultilayerNetwork.load_mpx(file_path="data/er_5.mpx")
+    return nd.MultilayerNetwork.from_mpx(file_path="data/er_5.mpx")
 
 
 def get_sf2_network():
-    return nd.MultilayerNetwork.load_mpx(file_path="data/sf_2.mpx")
+    return nd.MultilayerNetwork.from_mpx(file_path="data/sf_2.mpx")
 
 
 def get_sf3_network():
-    return nd.MultilayerNetwork.load_mpx(file_path="data/sf_3.mpx")
+    return nd.MultilayerNetwork.from_mpx(file_path="data/sf_3.mpx")
 
 
 def get_sf5_network():
-    return nd.MultilayerNetwork.load_mpx(file_path="data/sf_5.mpx")
+    return nd.MultilayerNetwork.from_mpx(file_path="data/sf_5.mpx")

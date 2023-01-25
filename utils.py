@@ -72,8 +72,8 @@ def prepare_out_path_for_selector(selector):
         out_path = Path("./experiments/degree_centrality")
     elif isinstance(selector, nd.seeding.KShellSeedSelector):
         out_path = Path("./experiments/k_sheel")
-    elif isinstance(selector, nd.seeding.KShellExtendedSeedSelector):
-        out_path = Path("./experiments/k_sheel_actorwise")
+    elif isinstance(selector, nd.seeding.KShellMLNSeedSelector):
+        out_path = Path("./experiments/k_sheel_mln")
     elif isinstance(selector, nd.seeding.NeighbourhoodSizeSelector):
         out_path = Path("./experiments/neighbourhood_size")
     elif isinstance(selector, nd.seeding.PageRankSeedSelector):
@@ -82,6 +82,8 @@ def prepare_out_path_for_selector(selector):
         out_path = Path("./experiments/random")
     elif isinstance(selector, nd.seeding.VoteRankSeedSelector):
         out_path = Path("./experiments/vote_rank")
+    elif isinstance(selector, nd.seeding.VoteRankMLNSeedSelector):
+        out_path = Path("./experiments/vote_rank_mln")
     else:
         raise ValueError(f"{selector} is not a valid seed selector!")
     out_path.mkdir(exist_ok=True, parents=True)
@@ -94,7 +96,7 @@ def determine_repetitions_for_selector(selector):
         repeats = 1
     elif isinstance(selector, nd.seeding.KShellSeedSelector):
         repeats = 1
-    elif isinstance(selector, nd.seeding.KShellExtendedSeedSelector):
+    elif isinstance(selector, nd.seeding.KShellMLNSeedSelector):
         repeats = 7
     elif isinstance(selector, nd.seeding.NeighbourhoodSizeSelector):
         repeats = 1
@@ -103,6 +105,8 @@ def determine_repetitions_for_selector(selector):
     elif isinstance(selector, nd.seeding.RandomSeedSelector):
         repeats = 20
     elif isinstance(selector, nd.seeding.VoteRankSeedSelector):
+        repeats = 1
+    elif isinstance(selector, nd.seeding.VoteRankMLNSeedSelector):
         repeats = 1
     else:
         raise ValueError(f"{selector} is not a valid seed selector!")
