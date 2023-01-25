@@ -11,7 +11,7 @@ from utils import *
 
 # set_seed(43)  # in order to make reproducible results uncomment it!
 
-SEED_SELECTOR = nd.seeding.VoteRankMLNSeedSelector()
+SEED_SELECTOR = nd.seeding.NeighbourhoodSizeSelector()
 PROTOCOLS = ("OR", "AND")
 SEEDING_BUDGETS = [
     (100 - i, i) for i in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30]
@@ -33,7 +33,7 @@ NETWORKS = {
 MAX_EPOCHS_NUM = 1000
 PATIENCE = 1
 REPEATS_OF_EACH_CASE = determine_repetitions_for_selector(SEED_SELECTOR)
-FULL_LOGS_FREQ = 20
+FULL_LOGS_FREQ = 20 * REPEATS_OF_EACH_CASE
 OUT_DIR = prepare_out_path_for_selector(SEED_SELECTOR)
 
 global_stats_handler = pd.DataFrame(data={})
