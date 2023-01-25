@@ -17,14 +17,7 @@ SEEDING_MAX_BUDGET = 30
 NETWORKS = {
     "aucs": get_aucs_network(),
     "ckm_physicians": get_ckm_physicians_network(),
-    "eu_transportation": get_eu_transportation_network(),
     "lazega": get_lazega_network(),
-    "er2": get_er2_network(),
-    "er3": get_er3_network(),
-    "er5": get_er5_network(),
-    "sf2": get_sf2_network(),
-    "sf3": get_sf3_network(),
-    "sf5": get_sf5_network(),
 }
 
 MAX_EPOCHS_NUM = 1000

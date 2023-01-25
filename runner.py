@@ -11,7 +11,7 @@ from utils import *
 
 # set_seed(43)  # in order to make reproducible results uncomment it!
 
-SEED_SELECTOR = nd.seeding.RandomSeedSelector()
+SEED_SELECTOR = nd.seeding.VoteRankMLNSeedSelector()
 PROTOCOLS = ("OR", "AND")
 SEEDING_BUDGETS = [
     (100 - i, i) for i in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30]
@@ -88,13 +88,13 @@ for idx, investigated_case in enumerate(p_bar):
                 case_dir.mkdir(exist_ok=True)
                 logs.report(path=str(case_dir))
 
-        except:
+        except BaseException as e:
             # print corrupted case 
             diffusion_len = None
             active_actors_prct = None
             seed_actors_prct = None
             gain = None
-            print(f"Ooops something went wrong for case: {case_name}")
+            print(f"Ooops something went wrong for case: {case_name}: {e}")
 
         # update global logs
         case = {

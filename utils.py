@@ -90,23 +90,10 @@ def prepare_out_path_for_selector(selector):
     return out_path
 
 
-# TODO: determine how many times repeat experiments for following selectors
 def determine_repetitions_for_selector(selector):
-    if isinstance(selector, nd.seeding.DegreeCentralitySelector):
-        repeats = 1
-    elif isinstance(selector, nd.seeding.KShellSeedSelector):
-        repeats = 1
-    elif isinstance(selector, nd.seeding.KShellMLNSeedSelector):
-        repeats = 7
-    elif isinstance(selector, nd.seeding.NeighbourhoodSizeSelector):
-        repeats = 1
-    elif isinstance(selector, nd.seeding.PageRankSeedSelector):
-        repeats = 1 # TODO: sort by layer size
-    elif isinstance(selector, nd.seeding.RandomSeedSelector):
+    if isinstance(selector, nd.seeding.RandomSeedSelector):
         repeats = 20
-    elif isinstance(selector, nd.seeding.VoteRankSeedSelector):
-        repeats = 1
-    elif isinstance(selector, nd.seeding.VoteRankMLNSeedSelector):
+    elif isinstance(selector, nd.seeding.base_selector.BaseSeedSelector):
         repeats = 1
     else:
         raise ValueError(f"{selector} is not a valid seed selector!")
