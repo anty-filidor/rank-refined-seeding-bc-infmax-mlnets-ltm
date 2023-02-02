@@ -17,17 +17,17 @@ SEEDING_BUDGETS = [
     (100 - i, i) for i in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30]
 ]
 MI_VALUES = np.linspace(0.1, 0.9, num=9)
-NETWORKS = {
-    "aucs": get_aucs_network(),
-    "ckm_physicians": get_ckm_physicians_network(),
-    "eu_transportation": get_eu_transportation_network(),
-    "lazega": get_lazega_network(),
-    "er2": get_er2_network(),
-    "er3": get_er3_network(),
-    "er5": get_er5_network(),
-    "sf2": get_sf2_network(),
-    "sf3": get_sf3_network(),
-    "sf5": get_sf5_network(),
+NETWORKS_RANKS = {
+    "aucs": [_ := get_aucs_network(), SEED_SELECTOR(_, actorwise=True)],
+    "ckm_physicians": [_ := get_ckm_physicians_network(), SEED_SELECTOR(_, actorwise=True)],
+    "eu_transportation": [_ := get_eu_transportation_network(), SEED_SELECTOR(network=_, actorwise=True)],
+    "lazega": [_ := get_lazega_network(), SEED_SELECTOR(_, actorwise=True)],
+    "er2": [get_er2_network(), SEED_SELECTOR(_, actorwise=True)],
+    "er3": [get_er3_network(), SEED_SELECTOR(_, actorwise=True)],
+    "er5": [get_er5_network(), SEED_SELECTOR(_, actorwise=True)],
+    "sf2": [get_sf2_network(), SEED_SELECTOR(_, actorwise=True)],
+    "sf3": [get_sf3_network(), SEED_SELECTOR(_, actorwise=True)],
+    "sf5": [get_sf5_network(), SEED_SELECTOR(_, actorwise=True)],
 }
 
 MAX_EPOCHS_NUM = 1000
@@ -37,8 +37,8 @@ FULL_LOGS_FREQ = 20 * REPEATS_OF_EACH_CASE
 OUT_DIR = prepare_out_path_for_selector(SEED_SELECTOR)
 
 global_stats_handler = pd.DataFrame(data={})
-experiments = itertools.product(PROTOCOLS, SEEDING_BUDGETS, MI_VALUES, NETWORKS)
-p_bar = tqdm(list(experiments), desc="main loop", leave=False, colour="green")
+experiments = itertools.product(PROTOCOLS, SEEDING_BUDGETS, MI_VALUES, NETWORKS_RANKS)
+p_bar = tqdm(list(experiments)[:15], desc="main loop", leave=False, colour="green")
 
 print(f"Experiments started at {get_current_time()}")
 
@@ -48,12 +48,13 @@ for idx, investigated_case in enumerate(p_bar):
     protocol = investigated_case[0]
     seeding_budget = investigated_case[1]
     mi_value = investigated_case[2]
-    network = NETWORKS[investigated_case[3]]
+    network, ranking = NETWORKS_RANKS[investigated_case[3]]
 
-    # initialise model
+    # initialise model - in order to speed up computations we use mocky selector
+    # and feed it with apriori computed ranking
     mltm = nd.models.MLTModel(
         protocol=protocol,
-        seed_selector=SEED_SELECTOR,
+        seed_selector=nd.seeding.MockyActorSelector(ranking),
         seeding_budget = seeding_budget,
         mi_value=mi_value,
     )
