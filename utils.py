@@ -78,6 +78,8 @@ def prepare_out_path_for_selector(selector):
         out_path = Path("./experiments/neighbourhood_size")
     elif isinstance(selector, nd.seeding.PageRankSeedSelector):
         out_path = Path("./experiments/page_rank")
+    elif isinstance(selector, nd.seeding.PageRankMLNSeedSelector):
+        out_path = Path("./experiments/page_rank_mln")
     elif isinstance(selector, nd.seeding.RandomSeedSelector):
         out_path = Path("./experiments/random")
     elif isinstance(selector, nd.seeding.VoteRankSeedSelector):
