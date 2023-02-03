@@ -12,22 +12,28 @@ from utils import *
 # set_seed(43)  # in order to make reproducible results uncomment it!
 
 SEED_SELECTOR = nd.seeding.NeighbourhoodSizeSelector()
+
 PROTOCOLS = ("OR", "AND")
-SEEDING_BUDGETS = [
+SEED_BUDGETS = [
     (100 - i, i) for i in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30]
 ]
-MI_VALUES = np.linspace(0.1, 0.9, num=9)
-NETWORKS_RANKS = {
+MI_VALS = np.linspace(0.1, 0.9, num=9)
+NETS_RANKS = {
     "aucs": [_ := get_aucs_network(), SEED_SELECTOR(_, actorwise=True)],
-    "ckm_physicians": [_ := get_ckm_physicians_network(), SEED_SELECTOR(_, actorwise=True)],
-    "eu_transportation": [_ := get_eu_transportation_network(), SEED_SELECTOR(network=_, actorwise=True)],
+    "ckm_physicians": [
+        _ := get_ckm_physicians_network(), SEED_SELECTOR(_, actorwise=True)
+    ],
+    "eu_transportation": [
+        _ := get_eu_transportation_network(),
+        SEED_SELECTOR(network=_, actorwise=True)
+    ],
     "lazega": [_ := get_lazega_network(), SEED_SELECTOR(_, actorwise=True)],
-    "er2": [get_er2_network(), SEED_SELECTOR(_, actorwise=True)],
-    "er3": [get_er3_network(), SEED_SELECTOR(_, actorwise=True)],
-    "er5": [get_er5_network(), SEED_SELECTOR(_, actorwise=True)],
-    "sf2": [get_sf2_network(), SEED_SELECTOR(_, actorwise=True)],
-    "sf3": [get_sf3_network(), SEED_SELECTOR(_, actorwise=True)],
-    "sf5": [get_sf5_network(), SEED_SELECTOR(_, actorwise=True)],
+    "er2": [_ := get_er2_network(), SEED_SELECTOR(_, actorwise=True)],
+    "er3": [_ := get_er3_network(), SEED_SELECTOR(_, actorwise=True)],
+    "er5": [_ := get_er5_network(), SEED_SELECTOR(_, actorwise=True)],
+    "sf2": [_ := get_sf2_network(), SEED_SELECTOR(_, actorwise=True)],
+    "sf3": [_ := get_sf3_network(), SEED_SELECTOR(_, actorwise=True)],
+    "sf5": [_ := get_sf5_network(), SEED_SELECTOR(_, actorwise=True)],
 }
 
 MAX_EPOCHS_NUM = 1000
@@ -37,8 +43,8 @@ FULL_LOGS_FREQ = 20 * REPEATS_OF_EACH_CASE
 OUT_DIR = prepare_out_path_for_selector(SEED_SELECTOR)
 
 global_stats_handler = pd.DataFrame(data={})
-experiments = itertools.product(PROTOCOLS, SEEDING_BUDGETS, MI_VALUES, NETWORKS_RANKS)
-p_bar = tqdm(list(experiments)[:15], desc="main loop", leave=False, colour="green")
+experiments = itertools.product(PROTOCOLS, SEED_BUDGETS, MI_VALS, NETS_RANKS)
+p_bar = tqdm(list(experiments), desc="main loop", leave=False, colour="green")
 
 print(f"Experiments started at {get_current_time()}")
 
@@ -48,7 +54,7 @@ for idx, investigated_case in enumerate(p_bar):
     protocol = investigated_case[0]
     seeding_budget = investigated_case[1]
     mi_value = investigated_case[2]
-    network, ranking = NETWORKS_RANKS[investigated_case[3]]
+    network, ranking = NETS_RANKS[investigated_case[3]]
 
     # initialise model - in order to speed up computations we use mocky selector
     # and feed it with apriori computed ranking

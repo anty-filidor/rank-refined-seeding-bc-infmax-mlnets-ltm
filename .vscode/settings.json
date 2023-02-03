@@ -1,4 +1,4 @@
 {
     "python.analysis.typeCheckingMode": "basic",
-    "terminal.integrated.fontFamily": "Consolas"
+    // "terminal.integrated.fontFamily": "Consolas"`
 }
