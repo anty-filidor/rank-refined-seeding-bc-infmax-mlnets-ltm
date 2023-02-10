@@ -91,7 +91,10 @@ for idx, investigated_case in enumerate(p_bar):
             # if gain is relevant update the best currently actor
             if (
                 coverage > best_coverage or 
-                coverage == best_coverage and diffusion_len < best_diffusion_len
+                (
+                    coverage == best_coverage and
+                    diffusion_len < best_diffusion_len
+                )
             ):
                 best_actor = actor
                 best_diffusion_len = diffusion_len
