@@ -23,7 +23,7 @@ NETWORKS = {
 MAX_EPOCHS_NUM = 1000
 PATIENCE = 1
 REPEATS_OF_EACH_CASE = 1
-FULL_LOGS_FREQ = 5
+FULL_LOGS_FREQ = 1
 OUT_DIR = Path("./experiments/greedy")
 
 global_stats_handler = pd.DataFrame(data={})
@@ -47,7 +47,7 @@ for idx, investigated_case in enumerate(p_bar):
 
         # containers for the best actor in the run and its performance
         best_actor = None
-        best_diffusion_len = 0
+        best_diffusion_len = MAX_EPOCHS_NUM
         best_coverage = 0
         best_logs = None
 
@@ -128,13 +128,6 @@ for idx, investigated_case in enumerate(p_bar):
             ignore_index=True,
             axis=0,
         )
-
-        if best_coverage == 100.0:
-            print(
-                f"\nFound sufficient greedy ranking that reaches 100% of "
-                f"coverage: {[i.actor_id for i in greedy_ranking]}"
-            )
-            break
 
 global_stats_handler.to_csv(OUT_DIR.joinpath("results.csv"))
 
