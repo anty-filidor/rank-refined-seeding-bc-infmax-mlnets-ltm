@@ -1,4 +1,4 @@
-# LTM seeding for MLN
+# Linear Threshold Mmodel seeding for Multi Layer Networks
 
 Repository for experiments on seed selection methods for multilayer linear 
 threshold model.
@@ -40,8 +40,12 @@ Experiments on greedy algorithms are defined in `greedy_runner.py` due to its
 "hacky" nature.
 
 These two scripts store results in `./experiments` directory. In order to
-concatenate them use `postprocessing.ipynb` notebook that will procide an 
+concatenate them use `postprocessing.ipynb` notebook that will produce an 
 aggregated file: `./experiments/all_results.csv`
 
 If reproducible run is needed please uncomment `set_seed` method invocation in
 scripts.
+
+## Generating data visualisations
+
+Please run `result_analysis.ipynb` to obtain analysis of the obtained results.

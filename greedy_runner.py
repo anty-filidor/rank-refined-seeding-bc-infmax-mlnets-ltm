@@ -2,9 +2,9 @@ from typing import List
 
 import itertools
 
-from loader import *
+from misc.loader import *
+from misc.utils import *
 from tqdm import tqdm
-from utils import *
 
 import network_diffusion as nd
 import numpy as np

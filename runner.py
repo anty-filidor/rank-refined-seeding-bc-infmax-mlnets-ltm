@@ -4,9 +4,9 @@ import network_diffusion as nd
 import numpy as np
 import pandas as pd
 
-from loader import *
+from misc.loader import *
+from misc.utils import *
 from tqdm import tqdm
-from utils import *
 
 
 # set_seed(43)  # in order to make reproducible results uncomment it!
