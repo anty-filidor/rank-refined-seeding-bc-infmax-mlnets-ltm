@@ -75,7 +75,11 @@ def prepare_out_path_for_selector(selector):
     elif isinstance(selector, nd.seeding.KShellMLNSeedSelector):
         out_path = Path("./experiments/k_sheel_mln")
     elif isinstance(selector, nd.seeding.NeighbourhoodSizeSelector):
-        out_path = Path("./experiments/neighbourhood_size")
+        hop = selector.connection_hop
+        if hop == 1:
+            out_path = Path("./experiments/neighbourhood_size")
+        else:
+            out_path = Path(f"./experiments/neighbourhood_{hop}_hop_size")
     elif isinstance(selector, nd.seeding.PageRankSeedSelector):
         out_path = Path("./experiments/page_rank")
     elif isinstance(selector, nd.seeding.PageRankMLNSeedSelector):

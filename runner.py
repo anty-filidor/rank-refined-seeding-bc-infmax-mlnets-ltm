@@ -11,7 +11,7 @@ from tqdm import tqdm
 
 # set_seed(43)  # in order to make reproducible results uncomment it!
 
-SEED_SELECTOR = nd.seeding.NeighbourhoodSizeSelector()
+SEED_SELECTOR = nd.seeding.NeighbourhoodSizeSelector(connection_hop=2)
 
 PROTOCOLS = ("OR", "AND")
 SEED_BUDGETS = [
