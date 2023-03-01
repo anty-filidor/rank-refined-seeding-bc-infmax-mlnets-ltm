@@ -11,9 +11,9 @@ from tqdm import tqdm
 
 # set_seed(43)  # in order to make reproducible results uncomment it!
 
-SEED_SELECTOR = nd.seeding.NeighbourhoodSizeSelector(connection_hop=2)
+SEED_SELECTOR = nd.seeding.DegreeCentralitySelector()
 
-PROTOCOLS = ("OR", "AND")
+PROTOCOLS = ("AND", )
 SEED_BUDGETS = [
     # (100 - i, i) for i in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30]  # for OR
     (100 - i, i) for i in [31, 32, 33, 34, 35, 36, 37, 38, 39, 40]  # for AND
@@ -25,8 +25,7 @@ NETS_RANKS = {
         _ := get_ckm_physicians_network(), SEED_SELECTOR(_, actorwise=True)
     ],
     "eu_transportation": [
-        _ := get_eu_transportation_network(),
-        SEED_SELECTOR(network=_, actorwise=True)
+        _ := get_eu_transportation_network(), SEED_SELECTOR(_, actorwise=True)
     ],
     "lazega": [_ := get_lazega_network(), SEED_SELECTOR(_, actorwise=True)],
     "er2": [_ := get_er2_network(), SEED_SELECTOR(_, actorwise=True)],
