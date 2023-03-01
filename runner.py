@@ -15,7 +15,8 @@ SEED_SELECTOR = nd.seeding.NeighbourhoodSizeSelector(connection_hop=2)
 
 PROTOCOLS = ("OR", "AND")
 SEED_BUDGETS = [
-    (100 - i, i) for i in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30]
+    # (100 - i, i) for i in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30]  # for OR
+    (100 - i, i) for i in [31, 32, 33, 34, 35, 36, 37, 38, 39, 40]  # for AND
 ]
 MI_VALS = np.linspace(0.1, 0.9, num=9)
 NETS_RANKS = {

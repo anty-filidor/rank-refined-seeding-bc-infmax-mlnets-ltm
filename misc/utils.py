@@ -93,7 +93,7 @@ def prepare_out_path_for_selector(selector):
     else:
         raise ValueError(f"{selector} is not a valid seed selector!")
     out_path.mkdir(exist_ok=True, parents=True)
-    return out_path
+    return out_path.parent / Path(out_path.stem + "_recalc_and")
 
 
 def determine_repetitions_for_selector(selector):
