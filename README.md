@@ -13,7 +13,7 @@ https://github.com/pbrodka/SQ4MLN.
 
 ## Configuration of the runtime
 
-`git submodule update --init --recursive`
+`git submodule update --init`
 
 `conda create --name ltm-seeding-mln python=3.10`
 `conda activate ltm-seeding-mln`
