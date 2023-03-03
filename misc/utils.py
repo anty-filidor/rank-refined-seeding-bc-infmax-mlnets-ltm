@@ -71,9 +71,9 @@ def prepare_out_path_for_selector(selector):
     if isinstance(selector, nd.seeding.DegreeCentralitySelector):
         out_path = Path("./experiments/degree_centrality")
     elif isinstance(selector, nd.seeding.KShellSeedSelector):
-        out_path = Path("./experiments/k_sheel")
+        out_path = Path("./experiments/k_shell")
     elif isinstance(selector, nd.seeding.KShellMLNSeedSelector):
-        out_path = Path("./experiments/k_sheel_mln")
+        out_path = Path("./experiments/k_shell_mln")
     elif isinstance(selector, nd.seeding.NeighbourhoodSizeSelector):
         hop = selector.connection_hop
         if hop == 1:
