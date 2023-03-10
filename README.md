@@ -32,19 +32,9 @@ https://github.com/pbrodka/SQ4MLN.
 
 ## Executing experiments
 
-To run experiments with "classic" seeding methods: `python runner.py` and update
-`SEED_SELECTOR` variable (in the beginning of the script) with seed selection
-class that is supported (full list is in `utils.py`).  
-
-Experiments on greedy algorithms are defined in `greedy_runner.py` due to its
-"hacky" nature.
-
-These two scripts store results in `./experiments` directory. In order to
-concatenate them use `postprocessing.ipynb` notebook that will produce an 
-aggregated file: `./experiments/all_results.csv`
-
-If reproducible run is needed please uncomment `set_seed` method invocation in
-scripts.
+To run experiments with execute: `run_experiments.py` and provide proper CLI
+arguments, i.e. a path to configuration file and runner type. See examples in
+'data/example_configs' for inspirations. 
 
 ## Generating data visualisations
 
