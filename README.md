@@ -18,7 +18,7 @@ https://github.com/pbrodka/SQ4MLN.
 `conda create --name ltm-seeding-mln python=3.10`
 `conda activate ltm-seeding-mln`
 `pip install -r submodules/network-diffusion/requirements/production.txt`
-`pip install ipykernel`
+`pip install ipykernel seaborn`
 `python -m ipykernel install --user --name=ltm-seeding-mln`
 
 ### Unix

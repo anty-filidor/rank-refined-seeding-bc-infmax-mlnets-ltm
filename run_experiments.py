@@ -42,4 +42,5 @@ if __name__ == "__main__":
     elif args.runner == "runner_optimised":
         print(f"Inferred runner as: {args.runner}")
         runner_optimised.run_experiments(config)
-    raise AttributeError(f"Incorrect runner name ({args.runner})!")
+    else:
+        raise AttributeError(f"Incorrect runner name ({args.runner})!")

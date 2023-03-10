@@ -1,6 +1,7 @@
 import pandas as pd
 import network_diffusion as nd
 import networkx as nx
+from functools import wraps
 
 
 def _network_from_pandas(path):
@@ -13,8 +14,19 @@ def _network_from_pandas(path):
     )
 
 
+def returns_some_layers(get_network_func):
+    @wraps(get_network_func)
+    def wrapper(layer_slice = None):
+        net = get_network_func()
+        if layer_slice is None or len(layer_slice) == 0:
+            return net
+        l_graphs = [net.layers[layer] for layer in layer_slice]
+        return nd.MultilayerNetwork.from_nx_layers(l_graphs, layer_slice)
+    return wrapper
+
+
 def get_aucs_network():
-    return nd.MultilayerNetwork.from_mpx(file_path="data/aucs.mpx")
+    return nd.MultilayerNetwork.from_mpx(file_path="data/networks/aucs.mpx")
 
 
 def get_ckm_physicians_network():
@@ -23,6 +35,7 @@ def get_ckm_physicians_network():
     )
 
 
+@returns_some_layers
 def get_eu_transportation_network():
     return _network_from_pandas(
         "data/networks/EUAirTransportation_multiplex_4NoNature.edges"
@@ -43,6 +56,7 @@ def get_er3_network():
     return nd.MultilayerNetwork.from_mpx(file_path="data/networks/er_3.mpx")
 
 
+@returns_some_layers
 def get_er5_network():
     return nd.MultilayerNetwork.from_mpx(file_path="data/networks/er_5.mpx")
 
@@ -55,6 +69,7 @@ def get_sf3_network():
     return nd.MultilayerNetwork.from_mpx(file_path="data/networks/sf_3.mpx")
 
 
+@returns_some_layers
 def get_sf5_network():
     return nd.MultilayerNetwork.from_mpx(file_path="data/networks/sf_5.mpx")
 
@@ -66,14 +81,20 @@ def load_network(net_name: str) -> nd.MultilayerNetwork:
         return get_ckm_physicians_network()
     elif net_name == "eu_transportation":
         return get_eu_transportation_network()
+    elif net_name == "eu_trans_1":
+        return get_eu_transportation_network(["KLM"])
     elif net_name == "lazega":
         return get_lazega_network()
+    elif net_name == "er1":
+        return get_er5_network(["l2"])
     elif net_name == "er2":
         return get_er2_network()
     elif net_name == "er3":
         return get_er3_network()
     elif net_name == "er5":
         return get_er5_network()
+    elif net_name == "sf1":
+        return get_sf5_network(["l3"])
     elif net_name == "sf2":
         return get_sf2_network()
     elif net_name == "sf3":
