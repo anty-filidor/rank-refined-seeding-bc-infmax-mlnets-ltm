@@ -3,7 +3,6 @@ import yaml
 
 import network_diffusion as nd
 import pandas as pd
-
 from misc.net_loader import load_network
 from misc.utils import *
 from tqdm import tqdm

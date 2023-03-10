@@ -57,3 +57,27 @@ def get_sf3_network():
 
 def get_sf5_network():
     return nd.MultilayerNetwork.from_mpx(file_path="data/sf_5.mpx")
+
+
+def load_network(net_name: str) -> nd.MultilayerNetwork:
+    if net_name == "aucs":
+        return get_aucs_network()
+    elif net_name == "ckm_physicians":
+        return get_ckm_physicians_network()
+    elif net_name == "eu_transportation":
+        return get_eu_transportation_network()
+    elif net_name == "lazega":
+        return get_lazega_network()
+    elif net_name == "er2":
+        return get_er2_network()
+    elif net_name == "er3":
+        return get_er3_network()
+    elif net_name == "er5":
+        return get_er5_network()
+    elif net_name == "sf2":
+        return get_sf2_network()
+    elif net_name == "sf3":
+        return get_sf3_network()
+    elif net_name == "sf5":
+        return get_sf5_network()
+    raise AttributeError(f"Unknown network: {net_name}")

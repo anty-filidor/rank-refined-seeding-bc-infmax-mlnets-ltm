@@ -1,137 +1,140 @@
+import itertools
+import yaml
 from typing import List
 
-import itertools
-
-from misc.loader import *
+import network_diffusion as nd
+import pandas as pd
+from misc.net_loader import load_network
 from misc.utils import *
 from tqdm import tqdm
 
-import network_diffusion as nd
-import numpy as np
-import pandas as pd
+
+def parameter_space(protocols, mi_values, networks):
+    nets = [(n, load_network(n)) for n in networks]  # network name, network
+    return itertools.product(protocols, mi_values, nets)
 
 
-PROTOCOLS = ("OR", "AND")
-MI_VALUES = np.linspace(0.1, 0.9, num=9)
-SEEDING_MAX_BUDGET = 30
-NETWORKS = {
-    "aucs": get_aucs_network(),
-    "ckm_physicians": get_ckm_physicians_network(),
-    "lazega": get_lazega_network(),
-}
+def run_experiments(config):
 
-MAX_EPOCHS_NUM = 1000
-PATIENCE = 1
-REPEATS_OF_EACH_CASE = 1
-FULL_LOGS_FREQ = 1
-OUT_DIR = Path("./experiments/greedy")
+    p_space = parameter_space(
+        protocols=config["model"]["parameters"]["protocols"],
+        mi_values=config["model"]["parameters"]["mi_values"],
+        networks=config["networks"],
+    )
+    seed_max_budget = config["model"]["parameters"]["max_seed_budget"]
 
-global_stats_handler = pd.DataFrame(data={})
-experiments = itertools.product(PROTOCOLS, MI_VALUES, NETWORKS)
-p_bar = tqdm(list(experiments), desc="main loop", leave=False, colour="green")
+    max_epochs_num = config["run"]["max_epochs_num"]
+    patience = config["run"]["patience"]
+    out_dir = Path(config["logging"]["out_dir"]) / config["logging"]["name"]
+    out_dir.mkdir(exist_ok=True, parents=True)
 
-print(f"Experiments started at {get_current_time()}")
+    global_stats_handler = pd.DataFrame(data={})
+    p_bar = tqdm(list(p_space), desc="main loop", leave=False, colour="green")
 
-for idx, investigated_case in enumerate(p_bar):
+    print(f"Experiments started at {get_current_time()}")
 
-    # obtain parameters of the propagation scenario
-    protocol = investigated_case[0]
-    mi_value = investigated_case[1]
-    network = NETWORKS[investigated_case[2]]
+    for idx, investigated_case in enumerate(p_bar):
 
-    greedy_ranking: List[nd.mln.actor.MLNetworkActor] = []
-    actors_num = network.get_actors_num()
+        # obtain parameters of the propagation scenario
+        protocol = investigated_case[0]
+        mi_value = investigated_case[1]
+        net_name, net = investigated_case[2]
 
-    # repeat until spent seeding budget exceeds maximum value
-    while (100 * len(greedy_ranking) / actors_num) <= SEEDING_MAX_BUDGET:
+        greedy_ranking: List[nd.MLNetworkActor] = []
+        actors_num = net.get_actors_num()
 
-        # containers for the best actor in the run and its performance
-        best_actor = None
-        best_diffusion_len = MAX_EPOCHS_NUM
-        best_coverage = 0
-        best_logs = None
+        # repeat until spent seeding budget exceeds maximum value
+        while (100 * len(greedy_ranking) / actors_num) <= seed_max_budget:
 
-        # obtain pool of actors and limit of budget in the run
-        eval_seed_budget = 100 * (len(greedy_ranking) + 1) / actors_num
-        available_actors = set(network.get_actors()).difference(
-            set(greedy_ranking)
-        )
+            # containers for the best actor in the run and its performance
+            best_actor = None
+            best_diffusion_len = max_epochs_num
+            best_coverage = 0
+            best_logs = None
 
-        # update progress_bar
-        case_name = (
-            f"proto_{protocol}--a_seeds_{round(eval_seed_budget, 2)}"
-            f"--mi_{round(mi_value, 3)}--net_{investigated_case[2]}"
-        )
-        p_bar.set_description_str(str(case_name))
-
-        # iterate greedly through all avail. actors to find the best combination
-        for actor in available_actors:
-
-            # initialise model with "ranking" that prioritises current actor
-            apriori_ranking = [
-                *greedy_ranking, actor, *available_actors.difference({actor})
-            ]
-            mltm = nd.models.MLTModel(
-                protocol=protocol,
-                seed_selector=nd.seeding.MockyActorSelector(apriori_ranking),
-                seeding_budget=(100 - eval_seed_budget, eval_seed_budget),
-                mi_value=mi_value,
+            # obtain pool of actors and limit of budget in the run
+            eval_seed_budget = 100 * (len(greedy_ranking) + 1) / actors_num
+            available_actors = set(net.get_actors()).difference(
+                set(greedy_ranking)
             )
 
-            # run experiment on a deep copy of the network!
-            experiment = nd.MultiSpreading(model=mltm, network=network.copy())
-            logs = experiment.perform_propagation(MAX_EPOCHS_NUM, PATIENCE)
-
-            # compute boost that current actor provides
-            diffusion_len, active_actors, seed_actors = extract_basic_stats(
-                detailed_logs=logs._local_stats, patience=PATIENCE
+            # update progress_bar
+            case_name = (
+                f"proto_{protocol}--a_seeds_{round(eval_seed_budget, 2)}"
+                f"--mi_{round(mi_value, 3)}--net_{investigated_case[2]}"
             )
-            coverage = active_actors / actors_num * 100
+            p_bar.set_description_str(str(case_name))
 
-            # if gain is relevant update the best currently actor
-            if (
-                coverage > best_coverage or 
-                (
-                    coverage == best_coverage and
-                    diffusion_len < best_diffusion_len
-                )
-            ):
-                best_actor = actor
-                best_diffusion_len = diffusion_len
-                best_coverage = coverage
-                best_logs = logs
-                print(
-                    f"\n\tcurrently best actor '{best_actor.actor_id}' for "
-                    f"greedy list: {[i.actor_id for i in greedy_ranking]}, "
-                    f"coverage: {round(best_coverage, 2)}"
+            # iterate greedly through all available actors to combination that
+            # gves the best coverage
+            for actor in available_actors:
+
+                # initialise model with "ranking" that prioritises current actor
+                apriori_ranking = [*greedy_ranking, actor, *available_actors.difference({actor})]
+                mltm = nd.models.MLTModel(
+                    protocol=protocol,
+                    seed_selector=nd.seeding.MockyActorSelector(apriori_ranking),
+                    seeding_budget=(100 - eval_seed_budget, eval_seed_budget),
+                    mi_value=mi_value,
                 )
 
-        # when the best combination is found update table with the best actors
-        greedy_ranking.append(best_actor)
+                # run experiment on a deep copy of the network!
+                experiment = nd.MultiSpreading(model=mltm, network=net.copy())
+                logs = experiment.perform_propagation(max_epochs_num, patience)
 
-        # save logs for further analysis
-        case_dir = OUT_DIR.joinpath(f"{idx}-{case_name}")
-        case_dir.mkdir(exist_ok=True, parents=True)
-        best_logs.report(path=str(case_dir))
+                # compute boost that current actor provides
+                diffusion_len, active_actors, _ = extract_basic_stats(
+                    detailed_logs=logs._local_stats, patience=patience
+                )
+                coverage = active_actors / actors_num * 100
 
-        # update global logs
-        case = {
-            "network": investigated_case[2],
-            "protocol": protocol,
-            "seeding_budget": eval_seed_budget,
-            "mi_value": mi_value,
-            "repetition_run": 1,
-            "diffusion_len": best_diffusion_len,
-            "active_actors_prct": best_coverage,
-            "seed_actors_prct": eval_seed_budget,
-            "gain": compute_gain(eval_seed_budget, best_coverage),
-        }
-        global_stats_handler = pd.concat(
-            [global_stats_handler, pd.DataFrame.from_records([case])],
-            ignore_index=True,
-            axis=0,
-        )
+                # if gain is relevant update the best currently actor
+                if (
+                    coverage > best_coverage or 
+                    (
+                        coverage == best_coverage and
+                        diffusion_len < best_diffusion_len
+                    )
+                ):
+                    best_actor = actor
+                    best_diffusion_len = diffusion_len
+                    best_coverage = coverage
+                    best_logs = logs
+                    print(
+                        f"\n\tcurrently best actor '{best_actor.actor_id}' for "
+                        f"greedy list: {[i.actor_id for i in greedy_ranking]}, "
+                        f"coverage: {round(best_coverage, 2)}"
+                    )
 
-global_stats_handler.to_csv(OUT_DIR.joinpath("results.csv"))
+            # when the best combination is found update greedy ranking
+            greedy_ranking.append(best_actor)
 
-print(f"Experiments finished at {get_current_time()}")
+            # save logs for further analysis
+            case_dir = out_dir.joinpath(f"{idx}-{case_name}")
+            case_dir.mkdir(exist_ok=True, parents=True)
+            best_logs.report(path=str(case_dir))
+
+            # update global logs
+            case = {
+                "network": net_name,
+                "protocol": protocol,
+                "seeding_budget": eval_seed_budget,
+                "mi_value": mi_value,
+                "repetition_run": 1,
+                "diffusion_len": best_diffusion_len,
+                "active_actors_prct": best_coverage,
+                "seed_actors_prct": eval_seed_budget,
+                "gain": compute_gain(eval_seed_budget, best_coverage),
+            }
+            global_stats_handler = pd.concat(
+                [global_stats_handler, pd.DataFrame.from_records([case])],
+                ignore_index=True,
+                axis=0,
+            )
+
+    # save global logs and config
+    global_stats_handler.to_csv(out_dir.joinpath("results.csv"))
+    with open(out_dir / "config.yaml", "w") as f:
+        yaml.dump(config, f)
+
+    print(f"Experiments finished at {get_current_time()}")
