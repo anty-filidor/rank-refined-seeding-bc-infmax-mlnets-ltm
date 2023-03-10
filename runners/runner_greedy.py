@@ -28,10 +28,10 @@ def run_experiments(config):
     out_dir = Path(config["logging"]["out_dir"]) / config["logging"]["name"]
     out_dir.mkdir(exist_ok=True, parents=True)
 
+    print(f"Experiments started at {get_current_time()}")
+    
     global_stats_handler = pd.DataFrame(data={})
     p_bar = tqdm(list(p_space), desc="main loop", leave=False, colour="green")
-
-    print(f"Experiments started at {get_current_time()}")
 
     for idx, investigated_case in enumerate(p_bar):
 
@@ -61,7 +61,7 @@ def run_experiments(config):
             # update progress_bar
             case_name = (
                 f"proto_{protocol}--a_seeds_{round(eval_seed_budget, 2)}"
-                f"--mi_{round(mi_value, 3)}--net_{investigated_case[2]}"
+                f"--mi_{round(mi_value, 3)}--net_{net_name}"
             )
             p_bar.set_description_str(str(case_name))
 

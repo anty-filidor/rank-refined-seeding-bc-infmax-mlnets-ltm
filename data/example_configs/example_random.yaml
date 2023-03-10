@@ -2,23 +2,32 @@ model:
   name: MLTModel
   parameters:
     protocols: ["AND", "OR"]
-    max_seed_budget: 4
+    seed_budgets: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30]
     mi_values: [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
     ss_method:
-      name: greedy
+      name: random
+      parameters: {}
 
 networks: [
   "aucs",
   "ckm_physicians",
   "eu_transportation",
   "lazega",
+  "er2",
+  "er3",
+  "er5",
+  "sf2",
+  "sf3",
+  "sf5",
 ]
 
 run:
   max_epochs_num: 1000
   patience: 1
+  repetitions: 20
+  random_seed: 43
 
 logging:
   full_output_frequency: 20
   out_dir: experiments
-  name: new_greedy
+  name: test_random

@@ -25,10 +25,10 @@ networks: [
 run:
   max_epochs_num: 1000
   patience: 1
-  repetitions: 1
-  random_seed: None
+  repetitions: 3
+  random_seed: null
 
 logging:
   full_output_frequency: 20
-  out_dir: experiments/aaa
-  name: recalc_and
+  out_dir: experiments
+  name: test_neighbourhood_size
