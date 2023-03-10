@@ -29,7 +29,6 @@ def run_experiments(config):
 
     max_epochs_num = config["run"]["max_epochs_num"]
     patience = config["run"]["patience"]
-    repeats_of_each_case = config["run"]["repetitions"]
     logging_freq = config["logging"]["full_output_frequency"]
     out_dir = Path(config["logging"]["out_dir"]) / config["logging"]["name"]
     out_dir.mkdir(exist_ok=True, parents=True)
@@ -56,64 +55,59 @@ def run_experiments(config):
             mi_value=mi_value,
         )
 
-        # perform experiment on given model and network "REPEATS" times
-        for repetition in range(1, 1 + repeats_of_each_case):
+        # update progress_bar
+        case_name = (
+            f"proto_{protocol}--a_seeds_{seeding_budget[1]}"
+            f"--mi_{round(mi_value, 3)}--net_{net_name}--run_no_repetitions"
+        )
+        p_bar.set_description_str(str(case_name))
 
-            # update progress_bar
-            case_name = (
-                f"proto_{protocol}--a_seeds_{seeding_budget[1]}"
-                f"--mi_{round(mi_value, 3)}--net_{net_name}"
-                f"--run_{repetition}_{repeats_of_each_case}"
+        try:
+            # run experiment on a deep copy of the network!
+            experiment = nd.MultiSpreading(model=mltm, network=net.copy())
+            logs = experiment.perform_propagation(
+                n_epochs=max_epochs_num, patience=patience
             )
-            p_bar.set_description_str(str(case_name))
 
-            try:
-                # run experiment on a deep copy of the network!
-                experiment = nd.MultiSpreading(model=mltm, network=net.copy())
-                logs = experiment.perform_propagation(
-                    n_epochs=max_epochs_num, patience=patience
-                )
-
-                # obtain global data and if case is even local one as well
-                diffusion_len, active_actors, seed_actors = extract_basic_stats(
-                    detailed_logs=logs._local_stats, patience=patience
-                )
-                active_actors_prct = active_actors / net.get_actors_num() * 100
-                seed_actors_prct = seed_actors / net.get_actors_num() * 100
-                gain = compute_gain(seed_actors_prct, active_actors_prct)
-                if idx % logging_freq == 0:
-                    case_dir = out_dir.joinpath(f"{idx}-{case_name}")
-                    case_dir.mkdir(exist_ok=True)
-                    logs.report(path=str(case_dir))
-
-            except KeyboardInterrupt as e:
-                raise e
-
-            except BaseException as e:
-                # print corrupted case 
-                diffusion_len = None
-                active_actors_prct = None
-                seed_actors_prct = None
-                gain = None
-                print(f"Ooops something went wrong for case: {case_name}: {e}")
-
-            # update global logs
-            case = {
-                "network": net_name,
-                "protocol": protocol,
-                "seeding_budget": seeding_budget[1],
-                "mi_value": mi_value,
-                "repetition_run": repetition,
-                "diffusion_len": diffusion_len,
-                "active_actors_prct": active_actors_prct,
-                "seed_actors_prct": seed_actors_prct,
-                "gain": gain,
-            }
-            global_stats_handler = pd.concat(
-                [global_stats_handler, pd.DataFrame.from_records([case])],
-                ignore_index=True,
-                axis=0,
+            # obtain global data and if case is even local one as well
+            diffusion_len, active_actors, seed_actors = extract_basic_stats(
+                detailed_logs=logs._local_stats, patience=patience
             )
+            active_actors_prct = active_actors / net.get_actors_num() * 100
+            seed_actors_prct = seed_actors / net.get_actors_num() * 100
+            gain = compute_gain(seed_actors_prct, active_actors_prct)
+            if idx % logging_freq == 0:
+                case_dir = out_dir.joinpath(f"{idx}-{case_name}")
+                case_dir.mkdir(exist_ok=True)
+                logs.report(path=str(case_dir))
+
+        except KeyboardInterrupt as e:
+            raise e
+
+        except BaseException as e:
+            diffusion_len = None
+            active_actors_prct = None
+            seed_actors_prct = None
+            gain = None
+            print(f"Ooops something went wrong for case: {case_name}: {e}")
+
+        # update global logs
+        case = {
+            "network": net_name,
+            "protocol": protocol,
+            "seeding_budget": seeding_budget[1],
+            "mi_value": mi_value,
+            "repetition_run": 1,
+            "diffusion_len": diffusion_len,
+            "active_actors_prct": active_actors_prct,
+            "seed_actors_prct": seed_actors_prct,
+            "gain": gain,
+        }
+        global_stats_handler = pd.concat(
+            [global_stats_handler, pd.DataFrame.from_records([case])],
+            ignore_index=True,
+            axis=0,
+        )
 
     # save global logs and config
     global_stats_handler.to_csv(out_dir.joinpath("results.csv"))

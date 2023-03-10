@@ -97,6 +97,28 @@ def prepare_out_path_for_selector(selector):
     return out_path
 
 
+def get_seed_selector(selector_name):
+    if selector_name == "degree_centrality":
+        return nd.seeding.DegreeCentralitySelector
+    elif selector_name == "k_shell":
+        return nd.seeding.KShellSeedSelector
+    elif selector_name == "k_shell_mln":
+        return nd.seeding.KShellMLNSeedSelector
+    elif selector_name == "neighbourhood_size":
+        return nd.seeding.NeighbourhoodSizeSelector
+    elif selector_name == "page_rank":
+        return nd.seeding.PageRankSeedSelector
+    elif selector_name == "page_rank_mln":
+        return nd.seeding.PageRankMLNSeedSelector
+    elif selector_name == "random":
+        return nd.seeding.RandomSeedSelector
+    elif selector_name == "vote_rank":
+        return nd.seeding.VoteRankSeedSelector
+    elif selector_name == "vote_rank_mln":
+        return nd.seeding.VoteRankMLNSeedSelector
+    raise AttributeError(f"{selector_name} is not a valid seed selector name!")
+
+
 def determine_repetitions_for_selector(selector):
     if isinstance(selector, nd.seeding.RandomSeedSelector):
         repeats = 20
