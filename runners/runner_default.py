@@ -29,7 +29,7 @@ def run_experiments(config):
     max_epochs_num = config["run"]["max_epochs_num"]
     patience = config["run"]["patience"]
     repeats_of_each_case = config["run"]["repetitions"]
-    logging_freq = config["logging"]["full_output_frequency"]
+    logging_freq = config["logging"]["full_output_frequency"] * repeats_of_each_case
     out_dir = Path(config["logging"]["out_dir"]) / config["logging"]["name"]
     out_dir.mkdir(exist_ok=True, parents=True)
 

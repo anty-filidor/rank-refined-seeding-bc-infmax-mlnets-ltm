@@ -3,8 +3,6 @@ import os
 import random
 import sys
 
-from pathlib import Path
-
 import numpy as np
 import network_diffusion as nd
 
@@ -67,36 +65,6 @@ def get_current_time():
     return now.strftime("%H:%M:%S")
 
 
-def prepare_out_path_for_selector(selector):
-    if isinstance(selector, nd.seeding.DegreeCentralitySelector):
-        out_path = Path("./experiments/degree_centrality")
-    elif isinstance(selector, nd.seeding.KShellSeedSelector):
-        out_path = Path("./experiments/k_shell")
-    elif isinstance(selector, nd.seeding.KShellMLNSeedSelector):
-        out_path = Path("./experiments/k_shell_mln")
-    elif isinstance(selector, nd.seeding.NeighbourhoodSizeSelector):
-        hop = selector.connection_hop
-        if hop == 1:
-            out_path = Path("./experiments/neighbourhood_size")
-        else:
-            out_path = Path(f"./experiments/neighbourhood_{hop}_hop_size")
-    elif isinstance(selector, nd.seeding.PageRankSeedSelector):
-        out_path = Path("./experiments/page_rank")
-    elif isinstance(selector, nd.seeding.PageRankMLNSeedSelector):
-        out_path = Path("./experiments/page_rank_mln")
-    elif isinstance(selector, nd.seeding.RandomSeedSelector):
-        out_path = Path("./experiments/random")
-    elif isinstance(selector, nd.seeding.VoteRankSeedSelector):
-        out_path = Path("./experiments/vote_rank")
-    elif isinstance(selector, nd.seeding.VoteRankMLNSeedSelector):
-        out_path = Path("./experiments/vote_rank_mln")
-    else:
-        raise ValueError(f"{selector} is not a valid seed selector!")
-    out_path = out_path.parent / Path(out_path.stem + "_recalc_and")  
-    out_path.mkdir(exist_ok=True, parents=True)
-    return out_path
-
-
 def get_seed_selector(selector_name):
     if selector_name == "degree_centrality":
         return nd.seeding.DegreeCentralitySelector
@@ -117,13 +85,3 @@ def get_seed_selector(selector_name):
     elif selector_name == "vote_rank_mln":
         return nd.seeding.VoteRankMLNSeedSelector
     raise AttributeError(f"{selector_name} is not a valid seed selector name!")
-
-
-def determine_repetitions_for_selector(selector):
-    if isinstance(selector, nd.seeding.RandomSeedSelector):
-        repeats = 20
-    elif isinstance(selector, nd.seeding.base_selector.BaseSeedSelector):
-        repeats = 1
-    else:
-        raise ValueError(f"{selector} is not a valid seed selector!")
-    return repeats
