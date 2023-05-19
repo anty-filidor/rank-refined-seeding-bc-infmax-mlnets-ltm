@@ -1,51 +1,51 @@
-from typing import Dict, List, Tuple
-import os
-import sys
-import networkx as nx
 import random
-import numpy as np
-from network_diffusion.models.mic_model import MICModel
-from network_diffusion.experiment_logger import ExperimentLogger
-from network_diffusion.seeding.degreecentrality_selector import DegreeCentralitySelector
-from network_diffusion.models.mic_model import MICModel
-from network_diffusion.seeding.random_selector import RandomSeedSelector
-from network_diffusion.mln.mlnetwork import MultilayerNetwork as mln
-from network_diffusion.models.mlt_model import MLTModel
-from network_diffusion.seeding.neighbourhoodsize_selector import NeighbourhoodSizeSelector
-from network_diffusion.multi_spreading import  MultiSpreading
-from network_diffusion.seeding.kshell_selector import  KShellSeedSelector, KShellMLNSeedSelector
-from network_diffusion.mln.actor import MLNetworkActor
-from network_diffusion.mln.mlnetwork import MultilayerNetwork as MLNetwork
-from network_diffusion.models.base_model import BaseModel
-from network_diffusion.models.base_model import NetworkUpdateBuffer as NUBuff
-from network_diffusion.models.utils.compartmental import CompartmentalGraph
-from network_diffusion.seeding.base_selector import BaseSeedSelector
-from network_diffusion.utils import BOLD_UNDERLINE, THIN_UNDERLINE, NumericType
-tup = (10, 90)
+import pandas as pd
 
-#seed = RandomSeedSelector()
+from misc.utils import set_seed
+from network_diffusion import MultilayerNetwork
+from network_diffusion.models import MICModel
+from network_diffusion.multi_spreading import MultiSpreading
+from network_diffusion.seeding import RandomSeedSelector
 
-ml = MLNetwork.from_mpx(
-    "D:/Zajęcia/Studia magisterskie/Do pracy magisterskiej/python/Independent-Cascade-Model/data/networks/er_3.mpx")
+rand_probability = random.random()
+rand_seed_num = int(random.random() * 100)
+rand_protocol = "OR" if random.random() > 0.5 else "AND"
+print(
+    f"Evaluating params: \
+    probability: {round(rand_probability, 3)}, \
+    seeds: {rand_seed_num}, \
+    protocol: {rand_protocol}"
+)
 
-# random seed
+# initialise a container for logs
+repetitive_logs = []
 
-random.seed('a28')
-seed = RandomSeedSelector()
-
-
-print(random.random())
-model = MICModel(tup,seed,'OR', 0.1)
-
-spred = MultiSpreading(model,ml)
-print(spred.perform_propagation(4))
+# perform 20 times experiments with the same parameters and collect bulk logs
+for i in range(20):
+    set_seed(0)
+    network = MultilayerNetwork.from_mpx("./data/networks/er_3.mpx")
+    model = MICModel(
+        seeding_budget=(100-rand_seed_num, rand_seed_num, 0),
+        seed_selector=RandomSeedSelector(),
+        protocol=rand_protocol,
+        probability=rand_probability,
+    )
+    experiment = MultiSpreading(model, network.copy())
+    logs = experiment.perform_propagation(n_epochs=5)
+    repetitive_logs.append(logs._global_stats_converted.copy())
 
 
-#graph: nx.Graph() = ml.layers['l1']
-#print(list(graph.neighbors('a630')))
+# compare all collected logs with the first one in order to determine wheter 
+# they are identical
+for idx, log in enumerate(repetitive_logs[1:]):
+    for l_name, l_reference_log in repetitive_logs[0].items():
+        try:
+            pd.testing.assert_frame_equal(log[l_name], l_reference_log)
+        except AssertionError as e:
+            print(f"Runs 0 and {idx} in layer {l_name} are not the same!")
+            print(log[l_name])
+            print(l_reference_log)
+            print(e)
+            print("\n\n\n")
 
-
-
-
-
-
+print("Finished checking if results are repetitive!")
