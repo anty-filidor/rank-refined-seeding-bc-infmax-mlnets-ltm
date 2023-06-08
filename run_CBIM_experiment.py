@@ -2,22 +2,23 @@ import argparse
 import yaml
 
 from misc.utils import set_seed
-from runners import runner_default, runner_greedy, runner_optimised, runner_ICM, runner_greedy_ICM,runner_ICM_optimized_multi, runner_ICM_optimized_single
+from runners import (runner_default, runner_greedy, runner_optimised, runner_ICM, runner_greedy_ICM, runner_ICM_optimized_multi,\
+    runner_ICM_optimized_single, runner_cbim)
 
 
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--config",
+        "-conf", "--config",
         help="Experiment config file (default: config.yaml).",
         type=str,
-        default="data/example_configs/example_greedy_ICM.yaml",
+
     )
     parser.add_argument(
         "--runner",
         help="A runner function to execute (default: default_runner).",
         type=str,
-        default="runner_greedy_ICM",
+        default="runner_cbim",
     )
     return parser.parse_args()
 
@@ -54,5 +55,8 @@ if __name__ == "__main__":
     elif args.runner == "runner_greedy_ICM":
         print(f"Inferred runner as: {args.runner}")
         runner_greedy_ICM.run_experiments(config)
+    elif args.runner == "runner_cbim":
+        print(f"Inferred runner as: {args.runner}")
+        runner_cbim.run_experiments(config)
     else:
         raise AttributeError(f"Incorrect runner name ({args.runner})!")

@@ -1,4 +1,11 @@
 **/__pycache__
 network_diffusion
 experiments
-experiments/**.zip
+experiments_icm_optimized
+experiments_icm/**.zip
+/experiments_icm/
+/data/Nowy dokument tekstowy.txt
+/vis/
+/results_close_OR/
+/results_1.csv
+/tmp.csv

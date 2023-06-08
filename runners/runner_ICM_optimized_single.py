@@ -101,7 +101,7 @@ def run_experiments(config):
                 "protocol": protocol,
                 "seeding_budget": seeding_budget[1],
                 "probability": probability,
-                "repetition_run": 1,
+                "repetition_run": repetition,
                 "diffusion_len": diffusion_len,
                 "active_actors_prct": active_actors_prct,
                 "seed_actors_prct": seed_actors_prct,

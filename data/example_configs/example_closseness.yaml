@@ -1,0 +1,34 @@
+model:
+  name: MICModel
+  parameters:
+    protocols: ["AND","OR"]
+    seed_budgets: [1, 5, 10, 20, 30]
+    probability: [0.02, 0.03, 0.05, 0.10, 0.20, 0.30]
+    ss_method:
+      name: closeness
+      parameters: {}
+
+networks: [
+   "aucs",
+  "ckm_physicians",
+  "eu_transportation",
+  "lazega",
+  "er2",
+  "er3",
+  "er5",
+  "sf2",
+  "sf3",
+  "sf5",
+
+]
+
+run:
+  max_epochs_num: 1000
+  patience: 2
+  repetitions: 20
+  random_seed: 43
+
+logging:
+  full_output_frequency: 20
+  out_dir: experiments
+  name: test_closeness-test

@@ -109,7 +109,7 @@ def run_experiments(config):
                     "active_actors_prct": active_actors_prct,
                     "seed_actors_prct": seed_actors_prct,
                     "gain": gain,
-                    "s_method": method['name']
+                    "s_method": f"{method['name']}:{method['parameters']['threshold']}"
                 }
                 global_stats_handler = pd.concat(
                     [global_stats_handler, pd.DataFrame.from_records([case])],

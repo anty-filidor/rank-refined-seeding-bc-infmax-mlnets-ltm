@@ -1,0 +1,29 @@
+model:
+  name: MICModel
+  parameters:
+    protocols: ["AND"]
+    seed_budgets: [5]
+    probability: [0.2]
+    ss_method: 
+     - name: degree_centrality 
+       parameters: {} 
+     - name: random
+       parameters: {}
+     
+
+networks: [
+   "aucs",
+ 
+
+]
+
+run:
+  max_epochs_num: 1000
+  patience: 2
+  repetitions: 3
+  random_seed: 43
+
+logging:
+  full_output_frequency: 20
+  out_dir: experiments_icm
+  name: test

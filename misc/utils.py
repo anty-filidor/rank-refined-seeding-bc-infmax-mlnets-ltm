@@ -32,6 +32,8 @@ def extract_basic_stats(detailed_logs, patience):
         for node in epoch_changes:
             if node["new_state"] == "1":
                 acviated_nodes.append(node['node_name'])
+            elif node["new_state"] == "-1":
+                acviated_nodes.append(node['node_name'])
             else:  # sanity check to detect leaks when nodes gets deactivated
                 if epoch_num > 0:
                     raise AttributeError("Results contradict themselves!")
@@ -84,4 +86,13 @@ def get_seed_selector(selector_name):
         return nd.seeding.VoteRankSeedSelector
     elif selector_name == "vote_rank_mln":
         return nd.seeding.VoteRankMLNSeedSelector
+    elif selector_name == "closeness":
+        return nd.seeding.ClosenessSelector
+    elif selector_name == "betweennes":
+        return nd.seeding.BetweennessSelector
+    elif selector_name == "katz":
+        return nd.seeding.KatzSelector
+    elif selector_name == "cbim":
+        return nd.seeding.CBIMselector
+
     raise AttributeError(f"{selector_name} is not a valid seed selector name!")

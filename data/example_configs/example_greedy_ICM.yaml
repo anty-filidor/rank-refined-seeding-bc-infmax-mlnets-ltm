@@ -1,0 +1,19 @@
+model:
+  name: MICModel
+  parameters:
+    protocols: ["AND","OR"]
+    max_seed_budget: 50
+    probability: [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7]
+
+networks: [
+  "ckm_physicians",
+]
+
+run:
+  max_epochs_num: 1000
+  patience: 1
+
+logging:
+  full_output_frequency: 20
+  out_dir: experiments/greedy
+  name: greedy_ckm_physicians

@@ -1,0 +1,45 @@
+model:
+  name: MICModel
+  parameters:
+    protocols: ["AND"]
+    seed_budgets: [ 5, 10, 20, 30, 40, 50 ]
+    probability: [ 0.2, 0.3, 0.4, 0.5, 0.60, 0.70 ]
+    ss_method:
+      - name: cbim
+        parameters: {'threshold': 0.1 }
+      - name: cbim
+        parameters: {'threshold': 0.2 }
+      - name: cbim
+        parameters: {'threshold': 0.4 }
+      - name: cbim
+        parameters: {'threshold': 0.5 }
+      - name: cbim
+        parameters: {'threshold': 0.6 }
+      - name: cbim
+        parameters: {'threshold': 0.8 }
+
+
+networks: [
+   "aucs",
+  "ckm_physicians",
+  "eu_transportation",
+  "lazega",
+  "er2",
+  "er3",
+  "er5",
+  "sf2",
+  "sf3",
+  "sf5",
+
+]
+
+run:
+  max_epochs_num: 1000
+  patience: 2
+  repetitions: 20
+  random_seed: 43
+
+logging:
+  full_output_frequency: 20
+  out_dir: experiments_ICM_optimized
+  name: cbim_AND

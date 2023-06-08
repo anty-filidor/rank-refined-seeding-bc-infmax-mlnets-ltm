@@ -1,0 +1,37 @@
+model:
+  name: MICModel
+  parameters:
+    protocols: ["AND"]
+    seed_budgets: [5, 10, 20, 30, 40, 50]
+    probability: [0.2, 0.3, 0.4, 0.5, 0.60, 0.70]
+    ss_method:
+      - name: degree_centrality
+        parameters: {}
+      - name: random
+        parameters: {}
+      - name: closeness
+        parameters: {}
+
+networks: [
+  "aucs",
+  "ckm_physicians",
+  "eu_transportation",
+  "lazega",
+  "er2",
+  "er3",
+  "er5",
+  "sf2",
+  "sf3",
+  "sf5",
+]
+
+run:
+  max_epochs_num: 1000
+  patience: 1
+  repetitions: 20
+  random_seed: 43
+
+logging:
+  full_output_frequency: 20
+  out_dir: experiments_icm_optimized
+  name: test_AND_1
