@@ -26,7 +26,7 @@ This repo works with git LFS, so please install it in order to pull large files!
 
 ### Unix
 
-`ln -s network_diffusion submodules/network-diffusion/network_diffusion`
+`ln -s submodules/network-diffusion/network_diffusion network_diffusion
 
 ### Windows
 
