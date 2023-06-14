@@ -1,4 +1,4 @@
-# Linear Threshold Mmodel seeding for Multi Layer Networks
+# Linear Threshold Model - seed selection methods - Multi Layer Networks
 
 Repository for experiments on seed selection methods for Multilayer Linear 
 Threshold Model.
