@@ -8,8 +8,9 @@ Affiliation: Wrocław University of Science and Technology, Poland
 
 ## Data
 
-Used networks come from repository with experiments on ICM model: 
-https://github.com/pbrodka/SQ4MLN.
+Networks used in experiments come from Piotr Bródka's repository with experiments
+on ICM model: https://github.com/pbrodka/SQ4MLN and from a website of
+Manilo De Domenico: https://manliodedomenico.com/data.php.
 
 ## Configuration of the runtime
 
