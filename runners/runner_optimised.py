@@ -12,9 +12,11 @@ from tqdm import tqdm
 def parameter_space(protocols, seed_selector, seed_budgets, mi_values, networks):
     ss = get_seed_selector(seed_selector["name"])(**seed_selector["parameters"])
     seed_budgets_full = [(100 - i, i) for i in seed_budgets]
-    net_ranks = [
-        (n, _ := load_network(n), ss(_, actorwise=True)) for n in networks
-    ]  # network name, network, ranking
+    net_ranks = []
+    for idx, net in enumerate(networks):
+        print(f"Computing ranking for: {net} ({idx+1}/{len(networks)})")
+        # network name, network, ranking
+        net_ranks.append((net, _ := load_network(net), ss(_, actorwise=True)))
     return itertools.product(protocols, seed_budgets_full, mi_values, net_ranks)
 
 

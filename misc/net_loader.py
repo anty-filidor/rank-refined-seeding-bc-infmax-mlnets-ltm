@@ -131,7 +131,7 @@ def get_cannes_network():
         layernames_path= root_path / "Cannes2013_layers.txt",
         edgelist_path=root_path / "Cannes2013_multiplex.edges",
         weighted=False,
-        digraph=True,
+        digraph=False,
     )
     return net
 
