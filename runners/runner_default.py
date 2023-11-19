@@ -68,14 +68,14 @@ def run_experiments(config):
 
             try:
                 # run experiment on a deep copy of the network!
-                experiment = nd.MultiSpreading(model=mltm, network=net.copy())
+                experiment = nd.Simulator(model=mltm, network=net.copy())
                 logs = experiment.perform_propagation(
                     n_epochs=max_epochs_num, patience=patience
                 )
 
                 # obtain global data and if case is even local one as well
                 diffusion_len, active_actors, seed_actors = extract_basic_stats(
-                    detailed_logs=logs._local_stats, patience=patience
+                    detailed_logs=logs._local_stats
                 )
                 active_actors_prct = active_actors / net.get_actors_num() * 100
                 seed_actors_prct = seed_actors / net.get_actors_num() * 100
