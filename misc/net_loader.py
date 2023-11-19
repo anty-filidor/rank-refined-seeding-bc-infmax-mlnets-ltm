@@ -138,7 +138,7 @@ def get_cannes_network():
 
 def load_network(net_name: str) -> nd.MultilayerNetwork:
     if net_name == "arxiv":
-        return get_arxiv_network(weighted=False)
+        return get_arxiv_network()
     elif net_name == "aucs":
         return get_aucs_network()
     elif net_name == "cannes":
