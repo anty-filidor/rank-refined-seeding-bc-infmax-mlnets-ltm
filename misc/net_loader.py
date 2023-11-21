@@ -136,6 +136,15 @@ def get_cannes_network():
     return net
 
 
+def get_timik1q2009_network():
+    layer_graphs = []
+    layer_names = []
+    for i in Path("data/networks/timik1q2009").glob("*.csv"):
+        layer_names.append(i.stem)
+        layer_graphs.append(nx.from_pandas_edgelist(pd.read_csv(i)))
+    return nd.MultilayerNetwork.from_nx_layers(layer_graphs, layer_names)
+
+
 def load_network(net_name: str) -> nd.MultilayerNetwork:
     if net_name == "arxiv":
         return get_arxiv_network()
@@ -167,4 +176,6 @@ def load_network(net_name: str) -> nd.MultilayerNetwork:
         return get_sf3_network()
     elif net_name == "sf5":
         return get_sf5_network()
+    elif net_name == "timik1q2009":
+        return get_timik1q2009_network()
     raise AttributeError(f"Unknown network: {net_name}")
