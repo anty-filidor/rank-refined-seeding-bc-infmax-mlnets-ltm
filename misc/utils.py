@@ -1,4 +1,5 @@
 import datetime
+import json
 import os
 import random
 import sys
@@ -98,3 +99,10 @@ def get_seed_selector(selector_name):
     elif selector_name == "vote_rank_mln":
         return nd.seeding.VoteRankMLNSeedSelector
     raise AttributeError(f"{selector_name} is not a valid seed selector name!")
+
+
+class JSONEncoder(json.JSONEncoder):
+        def default(self, obj):
+            if isinstance(obj, nd.MLNetworkActor):
+                return obj.__dict__
+            return super().default(obj)
