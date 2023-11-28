@@ -1,0 +1,45 @@
+logging:
+  full_output_frequency: 20
+  name: vote_rank_mln_or
+  out_dir: experiments/final_nets
+model:
+  name: MLTModel
+  parameters:
+    mi_values:
+    - 0.1
+    - 0.2
+    - 0.3
+    - 0.4
+    - 0.5
+    - 0.6
+    - 0.7
+    - 0.8
+    - 0.9
+    protocols:
+    - OR
+    seed_budgets:
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+    - 6
+    - 7
+    - 8
+    - 9
+    - 10
+    - 15
+    - 20
+    - 25
+    - 30
+    ss_method:
+      name: vote_rank_mln
+      parameters: {}
+networks:
+- arxiv
+- timik1q2009
+run:
+  max_epochs_num: 1000
+  patience: 1
+  random_seed: null
+  repetitions: 1
