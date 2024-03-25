@@ -25,6 +25,7 @@ def load_nets_compute_rankings(seed_selector, networks, out_dir, ranking_path):
         # load network
         net_graph = load_network(net_name)
         ss_ranking_name = Path(f"{net_name}_{ss.__class__.__name__}.json")
+        print("\tnetwork loaded")
 
         # compute ranking or load saved one
         if ranking_path:
@@ -34,17 +35,19 @@ def load_nets_compute_rankings(seed_selector, networks, out_dir, ranking_path):
             ranking = [nd.MLNetworkActor.from_dict(rd) for rd in ranking_dict]
         else:
             ranking = ss(net_graph, actorwise=True)
+        print("\ranking computed/loaded")
         nets_and_ranks[net_name] = (net_graph, ranking)
 
         # save computed ranking
         with open(out_dir / ss_ranking_name, "w") as f:
             json.dump(ranking, f, cls=JSONEncoder)
-            print(f"\tsaved ranking")
+            print(f"\tranking saved in the storage")
 
     return nets_and_ranks 
 
 
 def run_experiments(config):
+    print(f"Experiments started at {get_current_time()}")
 
     # get parameter space and experiment's hyperparams
     p_space = get_parameter_space(
@@ -74,7 +77,7 @@ def run_experiments(config):
     global_stats_handler = pd.DataFrame(data={})
     p_bar = tqdm(list(p_space), desc="main loop", leave=False, colour="green")
 
-    print(f"Experiments started at {get_current_time()}")
+    print(f"Simulations started at {get_current_time()}")
     for idx, investigated_case in enumerate(p_bar):
 
         # obtain parameters of the propagation scenario

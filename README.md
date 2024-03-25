@@ -69,3 +69,12 @@ arguments, i.e. a path to configuration file and runner type. See examples in
 
 Please run `result_analysis.ipynb` to obtain analysis from performed 
 experiments.
+
+
+## TODO
+- save detailed logs as zip immediately
+- make nd installable vis pip
+
+
+1. nowe metody
+2. większe sieci

@@ -2,7 +2,7 @@ import argparse
 import yaml
 
 from misc.utils import set_seed
-from runners import runner_default, runner_greedy, runner_optimised
+from runners import runner_greedy, runner_optimised
 
 
 def parse_args():
@@ -33,10 +33,7 @@ if __name__ == "__main__":
         set_seed(config["run"]["random_seed"])
     print(f"Loaded config: {config}")
 
-    if args.runner == "runner_default":
-        print(f"Inferred runner as: {args.runner}")
-        runner_default.run_experiments(config)
-    elif args.runner == "runner_greedy":
+    if args.runner == "runner_greedy":
         print(f"Inferred runner as: {args.runner}")
         runner_greedy.run_experiments(config)
     elif args.runner == "runner_optimised":

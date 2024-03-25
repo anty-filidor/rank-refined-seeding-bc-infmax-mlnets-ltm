@@ -76,7 +76,7 @@ def enable_prints():
 
 def get_current_time():
     now = datetime.datetime.now()
-    return now.strftime("%H:%M:%S")
+    return now.strftime("%Y-%m-%d %H:%M:%S")
 
 
 def get_seed_selector(selector_name):
