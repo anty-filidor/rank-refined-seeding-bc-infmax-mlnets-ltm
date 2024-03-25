@@ -35,7 +35,7 @@ def load_nets_compute_rankings(seed_selector, networks, out_dir, ranking_path):
             ranking = [nd.MLNetworkActor.from_dict(rd) for rd in ranking_dict]
         else:
             ranking = ss(net_graph, actorwise=True)
-        print("\ranking computed/loaded")
+        print("\tranking computed/loaded")
         nets_and_ranks[net_name] = (net_graph, ranking)
 
         # save computed ranking
@@ -75,9 +75,10 @@ def run_experiments(config):
 
     # init containers for results
     global_stats_handler = pd.DataFrame(data={})
-    p_bar = tqdm(list(p_space), desc="main loop", leave=False, colour="green")
-
+    detailed_stats_dirs: list[Path] = []
     print(f"Simulations started at {get_current_time()}")
+
+    p_bar = tqdm(list(p_space), desc="main loop", leave=False, colour="green")
     for idx, investigated_case in enumerate(p_bar):
 
         # obtain parameters of the propagation scenario
@@ -120,6 +121,7 @@ def run_experiments(config):
             if idx % logging_freq == 0:
                 case_dir = out_dir.joinpath(f"{idx}-{case_name}")
                 case_dir.mkdir(exist_ok=True)
+                detailed_stats_dirs.append(case_dir)
                 logs.report(path=str(case_dir))
 
         except KeyboardInterrupt as e:
@@ -152,4 +154,5 @@ def run_experiments(config):
 
     # save global logs
     global_stats_handler.to_csv(out_dir.joinpath("results.csv"))
+    zip_detailed_logs(detailed_stats_dirs, rm_logged_dirs=True)
     print(f"Experiments finished at {get_current_time()}")

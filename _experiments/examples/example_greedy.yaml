@@ -20,5 +20,5 @@ run:
 
 logging:
   full_output_frequency: 20
-  out_dir: experiments
+  out_dir: "./dry_runs"
   name: new_greedy

@@ -1,8 +1,12 @@
 import argparse
+import warnings
 import yaml
 
 from misc.utils import set_seed
 from runners import runner_greedy, runner_optimised
+
+
+warnings.filterwarnings(action="ignore", category=FutureWarning)
 
 
 def parse_args():
@@ -11,13 +15,13 @@ def parse_args():
         "--config",
         help="Experiment config file (default: config.yaml).",
         type=str,
-        default="data/example_configs/example_nghb_s.yaml",
+        required=True,
     )
     parser.add_argument(
         "--runner",
-        help="A runner function to execute (default: default_runner).",
+        help="A runner function to execute (default: runner_optimised).",
         type=str,
-        default="runner_default",
+        default="runner_optimised",
     )
     return parser.parse_args()
 

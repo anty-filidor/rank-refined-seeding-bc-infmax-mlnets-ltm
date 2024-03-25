@@ -2,7 +2,11 @@ import datetime
 import json
 import os
 import random
+import shutil
+import subprocess
 import sys
+
+from pathlib import Path
 
 import numpy as np
 import network_diffusion as nd
@@ -106,3 +110,33 @@ class JSONEncoder(json.JSONEncoder):
             if isinstance(obj, nd.MLNetworkActor):
                 return obj.__dict__
             return super().default(obj)
+
+
+def zip_detailed_logs(logged_dirs: list[Path], rm_logged_dirs: bool = True) -> None:
+    # Ensure at least one directory is provided
+    if len(logged_dirs) == 0:
+        print("No directories provided to create archive from.")
+        return
+    
+    # Get the parent directory of the first directory in logged_dirs
+    parent_dir = logged_dirs[0].parent
+    
+    # Create the name for the zip file based on the parent directory
+    zip_filename = parent_dir / "detailed_logs.zip"
+
+    # Create the archive
+    try:
+        logged_dirs_as_str = " ".join([str(ld) for ld in logged_dirs])
+        command = f"zip -r {zip_filename} {logged_dirs_as_str}"
+        subprocess.check_output(
+            command, shell=True, stderr=subprocess.STDOUT, universal_newlines=True
+        )
+    except subprocess.CalledProcessError as e:
+        print(f"Error executing command: {e}")
+
+    # Optionally remove the logged directories
+    if rm_logged_dirs:
+        for dir_path in logged_dirs:
+            shutil.rmtree(dir_path)
+
+    print(f"Compressed detailed logs.")
