@@ -1,5 +1,4 @@
 **/__pycache__
 **/.DS_Store
 network_diffusion
-experiments
-experiments/**.zip
+_experiments/**.zip
