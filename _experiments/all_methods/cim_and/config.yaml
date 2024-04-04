@@ -1,0 +1,56 @@
+logging:
+  full_output_frequency: 20
+  name: cim_and
+  out_dir: ./_experiments/all_methods
+model:
+  name: MLTModel
+  parameters:
+    mi_values:
+    - 0.1
+    - 0.2
+    - 0.3
+    - 0.4
+    - 0.5
+    - 0.6
+    - 0.7
+    - 0.8
+    - 0.9
+    protocols:
+    - AND
+    seed_budgets:
+    - 15
+    - 20
+    - 25
+    - 30
+    - 31
+    - 32
+    - 33
+    - 34
+    - 35
+    - 36
+    - 37
+    - 38
+    - 39
+    - 40
+    ss_method:
+      name: cim
+      parameters: {}
+networks:
+- aucs
+- ckm_physicians
+- er1
+- er2
+- er3
+- er5
+- eu_trans_1
+- eu_transportation
+- lazega
+- sf1
+- sf2
+- sf3
+- sf5
+run:
+  max_epochs_num: 10
+  patience: 1
+  random_seed: null
+  repetitions: 3

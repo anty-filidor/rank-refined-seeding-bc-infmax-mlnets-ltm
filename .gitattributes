@@ -1,5 +1,4 @@
-experiments/**/*.zip filter=lfs diff=lfs merge=lfs -text
-data/**/*.zip filter=lfs diff=lfs merge=lfs -text
-data/networks/timik1q2009/transactions.csv filter=lfs diff=lfs merge=lfs -text
-data/networks/timik1q2009/visits.csv filter=lfs diff=lfs merge=lfs -text
-data/networks/timik1q2009/messages.csv filter=lfs diff=lfs merge=lfs -text
+_experiments/**/*.zip filter=lfs diff=lfs merge=lfs -text
+_data_set/timik1q2009/transactions.csv filter=lfs diff=lfs merge=lfs -text
+_data_set/timik1q2009/visits.csv filter=lfs diff=lfs merge=lfs -text
+_data_set/timik1q2009/messages.csv filter=lfs diff=lfs merge=lfs -text
