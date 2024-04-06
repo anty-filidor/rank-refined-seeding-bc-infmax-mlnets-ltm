@@ -92,6 +92,8 @@ def get_seed_selector(selector_name):
         return nd.seeding.KShellSeedSelector
     elif selector_name == "k_shell_mln":
         return nd.seeding.KShellMLNSeedSelector
+    elif selector_name == "kpp_shell":
+        return nd.seeding.KPPShellSeedSelector
     elif selector_name == "neighbourhood_size":
         return nd.seeding.NeighbourhoodSizeSelector
     elif selector_name == "page_rank":

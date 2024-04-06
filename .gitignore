@@ -2,3 +2,4 @@
 **/.DS_Store
 _experiments/**.zip
 dry_runs
+*.yaml
