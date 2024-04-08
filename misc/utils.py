@@ -88,6 +88,8 @@ def get_seed_selector(selector_name):
         return nd.seeding.CIMSeedSelector
     elif selector_name == "degree_centrality":
         return nd.seeding.DegreeCentralitySelector
+    elif selector_name == "degree_centrality_discount":
+        return nd.seeding.DegreeCentralityDiscountSelector
     elif selector_name == "k_shell":
         return nd.seeding.KShellSeedSelector
     elif selector_name == "k_shell_mln":
@@ -96,6 +98,8 @@ def get_seed_selector(selector_name):
         return nd.seeding.KPPShellSeedSelector
     elif selector_name == "neighbourhood_size":
         return nd.seeding.NeighbourhoodSizeSelector
+    elif selector_name == "neighbourhood_size_discount":
+        return nd.seeding.NeighbourhoodSizeDiscountSelector
     elif selector_name == "page_rank":
         return nd.seeding.PageRankSeedSelector
     elif selector_name == "page_rank_mln":
