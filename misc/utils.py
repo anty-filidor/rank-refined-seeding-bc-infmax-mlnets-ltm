@@ -84,7 +84,9 @@ def get_current_time():
 
 
 def get_seed_selector(selector_name):
-    if selector_name == "cim":
+    if selector_name == "cbim":
+        return nd.seeding.CBIMSeedselector
+    elif selector_name == "cim":
         return nd.seeding.CIMSeedSelector
     elif selector_name == "degree_centrality":
         return nd.seeding.DegreeCentralitySelector
