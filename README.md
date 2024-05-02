@@ -44,8 +44,9 @@ This repo works with git LFS, so please install it in order to pull large files!
 ├── run_experiments.py        -> main entrypoint ti trigger simulations
 ├── submodules                -> backbone library for simulations as a submodule
 ├── postprocessing.ipynb      -> script to genreate `all_results.csv`
-├── result_analysis.ipynb     -> script to analyse results
-└──  robustness_maps.ipynb     -> script to obtain robustness maps
+├── all_result_analysis.ipynb -> script to analyse results form base networks
+├── top_result_analysis.ipynb -> script to analyse results from large networks
+└──  robustness_maps.ipynb    -> script to obtain robustness maps
 ```
 
 ## Executing experiments

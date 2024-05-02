@@ -1,0 +1,6 @@
+,OR,AND,MEAN
+vote_rank_mln,2.13,1.21,1.67
+vote_rank,2.77,4.24,3.5
+neighbourhood_size_discount,2.76,2.14,2.45
+degree_centrality_discount,3.44,3.27,3.36
+page_rank,2.77,4.13,3.45
