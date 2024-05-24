@@ -1,0 +1,17 @@
+,real,er,sf,all
+kpp_shell,3.49,3.65,4.06,3.71
+neighbourhood_size_discount,2.97,2.58,3.67,3.06
+k_shell_mln,3.56,2.64,3.39,3.23
+vote_rank,3.01,1.58,3.06,2.59
+degree_centrality,2.99,2.61,3.08,2.9
+cbim,3.29,3.51,5.44,4.0
+page_rank,2.56,2.16,3.22,2.64
+degree_centrality_discount,2.87,2.16,2.8,2.64
+page_rank_mln,2.95,2.46,3.85,3.07
+neighbourhood_2_hop_size,3.86,3.7,4.67,4.05
+cim,3.15,4.06,4.81,3.92
+neighbourhood_size,3.16,2.96,3.98,3.35
+vote_rank_mln,2.71,3.09,3.75,3.14
+k_shell,3.03,2.62,3.98,3.19
+random,4.15,4.86,5.75,4.84
+greedy,1.03,,,1.03

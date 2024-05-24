@@ -1,7 +1,9 @@
+from functools import wraps
+from pathlib import Path
+
 import pandas as pd
 import network_diffusion as nd
 import networkx as nx
-from functools import wraps
 
 
 def _network_from_pandas(path):
@@ -26,57 +28,130 @@ def returns_some_layers(get_network_func):
 
 
 def get_aucs_network():
-    return nd.MultilayerNetwork.from_mpx(file_path="data/networks/aucs.mpx")
+    return nd.MultilayerNetwork.from_mpx(file_path="_data_set/aucs.mpx")
 
 
 def get_ckm_physicians_network():
     return _network_from_pandas(
-        "data/networks/CKM-Physicians-Innovation_4NoNature.edges"
+        "_data_set/CKM-Physicians-Innovation_4NoNature.edges"
     )
 
 
 @returns_some_layers
 def get_eu_transportation_network():
     return _network_from_pandas(
-        "data/networks/EUAirTransportation_multiplex_4NoNature.edges"
+        "_data_set/EUAirTransportation_multiplex_4NoNature.edges"
     )
 
 
 def get_lazega_network():
     return _network_from_pandas(
-        "data/networks/Lazega-Law-Firm_4NoNatureNoLoops.edges"
+        "_data_set/Lazega-Law-Firm_4NoNatureNoLoops.edges"
     )
 
 
 def get_er2_network():
-    return nd.MultilayerNetwork.from_mpx(file_path="data/networks/er_2.mpx")
+    return nd.MultilayerNetwork.from_mpx(file_path="_data_set/er_2.mpx")
 
 
 def get_er3_network():
-    return nd.MultilayerNetwork.from_mpx(file_path="data/networks/er_3.mpx")
+    return nd.MultilayerNetwork.from_mpx(file_path="_data_set/er_3.mpx")
 
 
 @returns_some_layers
 def get_er5_network():
-    return nd.MultilayerNetwork.from_mpx(file_path="data/networks/er_5.mpx")
+    return nd.MultilayerNetwork.from_mpx(file_path="_data_set/er_5.mpx")
 
 
 def get_sf2_network():
-    return nd.MultilayerNetwork.from_mpx(file_path="data/networks/sf_2.mpx")
+    return nd.MultilayerNetwork.from_mpx(file_path="_data_set/sf_2.mpx")
 
 
 def get_sf3_network():
-    return nd.MultilayerNetwork.from_mpx(file_path="data/networks/sf_3.mpx")
+    return nd.MultilayerNetwork.from_mpx(file_path="_data_set/sf_3.mpx")
 
 
 @returns_some_layers
 def get_sf5_network():
-    return nd.MultilayerNetwork.from_mpx(file_path="data/networks/sf_5.mpx")
+    return nd.MultilayerNetwork.from_mpx(file_path="_data_set/sf_5.mpx")
+
+
+def get_ddm_network(layernames_path, edgelist_path, weighted, digraph):
+    # read mapping of layer IDs to their names
+    with open(layernames_path) as file:
+        layer_names = file.readlines()
+    layer_names = [ln.rstrip('\n').split(" ") for ln in layer_names]
+    layer_names = {ln[0]: ln[1] for ln in layer_names}
+    
+    # read the edgelist and create containers for the layers
+    df = pd.read_csv(
+        edgelist_path,
+        names=["layer_id", "node_1", "node_2", "weight"],
+        sep=" "
+    )
+    net_ids_dict = {
+        l_name: nx.DiGraph() if digraph else nx.Graph()
+        for l_name in [*df["layer_id"].unique()]
+    }
+
+    # populate network with edges
+    for _, row in df.iterrows():
+        if weighted:
+            attrs = {"weight": row["weight"]}
+        else:
+            attrs = {}
+        net_ids_dict[row["layer_id"]].add_edge(row["node_1"], row["node_2"], **attrs)
+    
+    # rename layers
+    net_names_dict = {
+        layer_names[str(layer_id)]: layer_graph
+        for layer_id, layer_graph in net_ids_dict.items()
+    }
+
+    # create multilater network from edges
+    return nd.MultilayerNetwork.from_nx_layers(
+        layer_names=[*net_names_dict.keys()], network_list=[*net_names_dict.values()]
+    )
+
+
+def get_arxiv_network():
+    root_path = Path("_data_set/arXiv-Netscience_Multiplex_Coauthorship/Dataset")
+    net = get_ddm_network(
+        layernames_path= root_path / "arxiv_netscience_layers.txt",
+        edgelist_path=root_path / "arxiv_netscience_multiplex.edges",
+        weighted=False,
+        digraph=False,
+    )
+    return net
+
+
+def get_cannes_network():
+    root_path = Path("_data_set/Cannes2013_Multiplex_Social/Dataset")
+    net = get_ddm_network(
+        layernames_path= root_path / "Cannes2013_layers.txt",
+        edgelist_path=root_path / "Cannes2013_multiplex.edges",
+        weighted=False,
+        digraph=False,
+    )
+    return net
+
+
+def get_timik1q2009_network():
+    layer_graphs = []
+    layer_names = []
+    for i in Path("_data_set/timik1q2009").glob("*.csv"):
+        layer_names.append(i.stem)
+        layer_graphs.append(nx.from_pandas_edgelist(pd.read_csv(i)))
+    return nd.MultilayerNetwork.from_nx_layers(layer_graphs, layer_names)
 
 
 def load_network(net_name: str) -> nd.MultilayerNetwork:
-    if net_name == "aucs":
+    if net_name == "arxiv":
+        return get_arxiv_network()
+    elif net_name == "aucs":
         return get_aucs_network()
+    elif net_name == "cannes":
+        return get_cannes_network()
     elif net_name == "ckm_physicians":
         return get_ckm_physicians_network()
     elif net_name == "eu_transportation":
@@ -101,4 +176,6 @@ def load_network(net_name: str) -> nd.MultilayerNetwork:
         return get_sf3_network()
     elif net_name == "sf5":
         return get_sf5_network()
+    elif net_name == "timik1q2009":
+        return get_timik1q2009_network()
     raise AttributeError(f"Unknown network: {net_name}")

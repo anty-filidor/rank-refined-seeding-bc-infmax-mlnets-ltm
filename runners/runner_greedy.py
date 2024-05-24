@@ -1,9 +1,12 @@
 import itertools
 import yaml
+
+from pathlib import Path
 from typing import List
 
 import network_diffusion as nd
 import pandas as pd
+
 from misc.net_loader import load_network
 from misc.utils import *
 from tqdm import tqdm
@@ -16,6 +19,7 @@ def parameter_space(protocols, mi_values, networks):
 
 def run_experiments(config):
 
+    # get parameter space and experiment's hyperparams
     p_space = parameter_space(
         protocols=config["model"]["parameters"]["protocols"],
         mi_values=config["model"]["parameters"]["mi_values"],
@@ -28,11 +32,16 @@ def run_experiments(config):
     out_dir = Path(config["logging"]["out_dir"]) / config["logging"]["name"]
     out_dir.mkdir(exist_ok=True, parents=True)
 
+    # save config
+    with open(out_dir / "config.yaml", "w") as f:
+        yaml.dump(config, f)
+
+    # init containers for results
+    global_stats_handler = pd.DataFrame(data={})
+    detailed_stats_dirs: list[Path] = []
     print(f"Experiments started at {get_current_time()}")
     
-    global_stats_handler = pd.DataFrame(data={})
     p_bar = tqdm(list(p_space), desc="main loop", leave=False, colour="green")
-
     for idx, investigated_case in enumerate(p_bar):
 
         # obtain parameters of the propagation scenario
@@ -79,12 +88,12 @@ def run_experiments(config):
                 )
 
                 # run experiment on a deep copy of the network!
-                experiment = nd.MultiSpreading(model=mltm, network=net.copy())
+                experiment = nd.Simulator(model=mltm, network=net.copy())
                 logs = experiment.perform_propagation(max_epochs_num, patience)
 
                 # compute boost that current actor provides
                 diffusion_len, active_actors, _ = extract_basic_stats(
-                    detailed_logs=logs._local_stats, patience=patience
+                    detailed_logs=logs._local_stats
                 )
                 coverage = active_actors / actors_num * 100
 
@@ -112,6 +121,7 @@ def run_experiments(config):
             # save logs for further analysis
             case_dir = out_dir.joinpath(f"{idx}-{case_name}")
             case_dir.mkdir(exist_ok=True, parents=True)
+            detailed_stats_dirs.append(case_dir)
             best_logs.report(path=str(case_dir))
 
             # update global logs
@@ -134,7 +144,6 @@ def run_experiments(config):
 
     # save global logs and config
     global_stats_handler.to_csv(out_dir.joinpath("results.csv"))
-    with open(out_dir / "config.yaml", "w") as f:
-        yaml.dump(config, f)
+    zip_detailed_logs(detailed_stats_dirs, rm_logged_dirs=True)
 
     print(f"Experiments finished at {get_current_time()}")

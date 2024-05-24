@@ -1,0 +1,531 @@
+[
+    {
+        "actor_id": "U123",
+        "_layers_states": {
+            "facebook": null,
+            "lunch": null,
+            "work": null
+        }
+    },
+    {
+        "actor_id": "U54",
+        "_layers_states": {
+            "facebook": null,
+            "lunch": null,
+            "leisure": null,
+            "work": null
+        }
+    },
+    {
+        "actor_id": "U109",
+        "_layers_states": {
+            "facebook": null,
+            "lunch": null,
+            "leisure": null,
+            "work": null
+        }
+    },
+    {
+        "actor_id": "U126",
+        "_layers_states": {
+            "lunch": null,
+            "leisure": null,
+            "work": null
+        }
+    },
+    {
+        "actor_id": "U130",
+        "_layers_states": {
+            "facebook": null,
+            "lunch": null,
+            "coauthor": null,
+            "work": null
+        }
+    },
+    {
+        "actor_id": "U79",
+        "_layers_states": {
+            "facebook": null,
+            "lunch": null,
+            "leisure": null,
+            "work": null
+        }
+    },
+    {
+        "actor_id": "U90",
+        "_layers_states": {
+            "lunch": null,
+            "leisure": null,
+            "work": null
+        }
+    },
+    {
+        "actor_id": "U71",
+        "_layers_states": {
+            "facebook": null,
+            "lunch": null,
+            "work": null
+        }
+    },
+    {
+        "actor_id": "U62",
+        "_layers_states": {
+            "lunch": null,
+            "leisure": null,
+            "work": null
+        }
+    },
+    {
+        "actor_id": "U140",
+        "_layers_states": {
+            "work": null
+        }
+    },
+    {
+        "actor_id": "U33",
+        "_layers_states": {
+            "lunch": null,
+            "work": null
+        }
+    },
+    {
+        "actor_id": "U106",
+        "_layers_states": {
+            "facebook": null,
+            "lunch": null,
+            "coauthor": null,
+            "leisure": null,
+            "work": null
+        }
+    },
+    {
+        "actor_id": "U91",
+        "_layers_states": {
+            "facebook": null,
+            "lunch": null,
+            "coauthor": null,
+            "leisure": null,
+            "work": null
+        }
+    },
+    {
+        "actor_id": "U102",
+        "_layers_states": {
+            "lunch": null
+        }
+    },
+    {
+        "actor_id": "U110",
+        "_layers_states": {
+            "facebook": null,
+            "lunch": null,
+            "coauthor": null,
+            "leisure": null,
+            "work": null
+        }
+    },
+    {
+        "actor_id": "U97",
+        "_layers_states": {
+            "lunch": null,
+            "coauthor": null,
+            "work": null
+        }
+    },
+    {
+        "actor_id": "U72",
+        "_layers_states": {
+            "lunch": null,
+            "coauthor": null,
+            "leisure": null,
+            "work": null
+        }
+    },
+    {
+        "actor_id": "U17",
+        "_layers_states": {
+            "lunch": null,
+            "leisure": null,
+            "work": null
+        }
+    },
+    {
+        "actor_id": "U63",
+        "_layers_states": {
+            "lunch": null,
+            "work": null
+        }
+    },
+    {
+        "actor_id": "U139",
+        "_layers_states": {
+            "lunch": null,
+            "work": null
+        }
+    },
+    {
+        "actor_id": "U59",
+        "_layers_states": {
+            "facebook": null,
+            "lunch": null,
+            "leisure": null,
+            "work": null
+        }
+    },
+    {
+        "actor_id": "U86",
+        "_layers_states": {
+            "lunch": null,
+            "work": null
+        }
+    },
+    {
+        "actor_id": "U76",
+        "_layers_states": {
+            "facebook": null,
+            "lunch": null,
+            "coauthor": null,
+            "leisure": null,
+            "work": null
+        }
+    },
+    {
+        "actor_id": "U14",
+        "_layers_states": {
+            "lunch": null,
+            "leisure": null,
+            "work": null
+        }
+    },
+    {
+        "actor_id": "U113",
+        "_layers_states": {
+            "facebook": null,
+            "lunch": null,
+            "leisure": null,
+            "work": null
+        }
+    },
+    {
+        "actor_id": "U118",
+        "_layers_states": {
+            "lunch": null,
+            "coauthor": null,
+            "leisure": null,
+            "work": null
+        }
+    },
+    {
+        "actor_id": "U67",
+        "_layers_states": {
+            "facebook": null,
+            "lunch": null,
+            "leisure": null,
+            "work": null
+        }
+    },
+    {
+        "actor_id": "U73",
+        "_layers_states": {
+            "lunch": null,
+            "leisure": null,
+            "work": null
+        }
+    },
+    {
+        "actor_id": "U18",
+        "_layers_states": {
+            "facebook": null,
+            "lunch": null,
+            "coauthor": null,
+            "leisure": null,
+            "work": null
+        }
+    },
+    {
+        "actor_id": "U134",
+        "_layers_states": {
+            "facebook": null,
+            "lunch": null,
+            "coauthor": null,
+            "work": null
+        }
+    },
+    {
+        "actor_id": "U3",
+        "_layers_states": {
+            "facebook": null,
+            "lunch": null,
+            "leisure": null,
+            "work": null
+        }
+    },
+    {
+        "actor_id": "U124",
+        "_layers_states": {
+            "facebook": null,
+            "lunch": null,
+            "leisure": null,
+            "work": null
+        }
+    },
+    {
+        "actor_id": "U138",
+        "_layers_states": {
+            "lunch": null,
+            "coauthor": null,
+            "leisure": null,
+            "work": null
+        }
+    },
+    {
+        "actor_id": "U92",
+        "_layers_states": {
+            "lunch": null,
+            "work": null
+        }
+    },
+    {
+        "actor_id": "U23",
+        "_layers_states": {
+            "lunch": null,
+            "leisure": null,
+            "work": null
+        }
+    },
+    {
+        "actor_id": "U32",
+        "_layers_states": {
+            "facebook": null,
+            "lunch": null,
+            "coauthor": null,
+            "leisure": null,
+            "work": null
+        }
+    },
+    {
+        "actor_id": "U99",
+        "_layers_states": {
+            "lunch": null,
+            "coauthor": null,
+            "leisure": null,
+            "work": null
+        }
+    },
+    {
+        "actor_id": "U107",
+        "_layers_states": {
+            "facebook": null,
+            "lunch": null,
+            "leisure": null,
+            "work": null
+        }
+    },
+    {
+        "actor_id": "U26",
+        "_layers_states": {
+            "lunch": null,
+            "coauthor": null,
+            "leisure": null,
+            "work": null
+        }
+    },
+    {
+        "actor_id": "U53",
+        "_layers_states": {
+            "lunch": null,
+            "coauthor": null,
+            "leisure": null,
+            "work": null
+        }
+    },
+    {
+        "actor_id": "U4",
+        "_layers_states": {
+            "facebook": null,
+            "lunch": null,
+            "leisure": null,
+            "work": null
+        }
+    },
+    {
+        "actor_id": "U48",
+        "_layers_states": {
+            "lunch": null,
+            "coauthor": null,
+            "work": null
+        }
+    },
+    {
+        "actor_id": "U19",
+        "_layers_states": {
+            "lunch": null,
+            "leisure": null,
+            "work": null
+        }
+    },
+    {
+        "actor_id": "U1",
+        "_layers_states": {
+            "facebook": null,
+            "lunch": null,
+            "coauthor": null,
+            "leisure": null,
+            "work": null
+        }
+    },
+    {
+        "actor_id": "U112",
+        "_layers_states": {
+            "facebook": null,
+            "lunch": null,
+            "work": null
+        }
+    },
+    {
+        "actor_id": "U41",
+        "_layers_states": {
+            "lunch": null,
+            "coauthor": null,
+            "leisure": null,
+            "work": null
+        }
+    },
+    {
+        "actor_id": "U10",
+        "_layers_states": {
+            "facebook": null,
+            "lunch": null,
+            "coauthor": null,
+            "leisure": null,
+            "work": null
+        }
+    },
+    {
+        "actor_id": "U69",
+        "_layers_states": {
+            "facebook": null,
+            "lunch": null,
+            "leisure": null,
+            "work": null
+        }
+    },
+    {
+        "actor_id": "U47",
+        "_layers_states": {
+            "facebook": null,
+            "lunch": null,
+            "coauthor": null,
+            "leisure": null,
+            "work": null
+        }
+    },
+    {
+        "actor_id": "U42",
+        "_layers_states": {
+            "facebook": null,
+            "lunch": null,
+            "leisure": null,
+            "work": null
+        }
+    },
+    {
+        "actor_id": "U29",
+        "_layers_states": {
+            "facebook": null,
+            "lunch": null,
+            "coauthor": null,
+            "leisure": null,
+            "work": null
+        }
+    },
+    {
+        "actor_id": "U37",
+        "_layers_states": {
+            "lunch": null,
+            "leisure": null,
+            "work": null
+        }
+    },
+    {
+        "actor_id": "U68",
+        "_layers_states": {
+            "lunch": null,
+            "coauthor": null,
+            "leisure": null,
+            "work": null
+        }
+    },
+    {
+        "actor_id": "U65",
+        "_layers_states": {
+            "facebook": null,
+            "lunch": null,
+            "leisure": null,
+            "work": null
+        }
+    },
+    {
+        "actor_id": "U6",
+        "_layers_states": {
+            "facebook": null,
+            "lunch": null,
+            "leisure": null,
+            "work": null
+        }
+    },
+    {
+        "actor_id": "U22",
+        "_layers_states": {
+            "lunch": null,
+            "coauthor": null,
+            "leisure": null,
+            "work": null
+        }
+    },
+    {
+        "actor_id": "U13",
+        "_layers_states": {
+            "lunch": null,
+            "coauthor": null,
+            "leisure": null,
+            "work": null
+        }
+    },
+    {
+        "actor_id": "U21",
+        "_layers_states": {
+            "facebook": null,
+            "lunch": null,
+            "leisure": null,
+            "work": null
+        }
+    },
+    {
+        "actor_id": "U142",
+        "_layers_states": {
+            "facebook": null,
+            "lunch": null,
+            "coauthor": null,
+            "leisure": null,
+            "work": null
+        }
+    },
+    {
+        "actor_id": "U141",
+        "_layers_states": {
+            "lunch": null,
+            "leisure": null,
+            "work": null
+        }
+    },
+    {
+        "actor_id": "U49",
+        "_layers_states": {
+            "facebook": null,
+            "lunch": null,
+            "leisure": null,
+            "work": null
+        }
+    }
+]
