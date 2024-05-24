@@ -1,7 +1,7 @@
-# Linear Threshold Model - seed selection methods - Multi Layer Networks
+# Rank-Refining Seed Selection Methods for Budget Constrained Influence Maximisation in Multilayer Networks under Linear Threshold Model
 
-Repository for experiments on seed selection methods for Multilayer Linear 
-Threshold Model.
+A repository with the datasets, experimental environment, post-processing pipeline,
+and detailed results for the above project.
 
 Authors: Michał Czuba, Piotr Bródka  
 Affiliation: Wrocław University of Science and Technology, Poland
@@ -43,19 +43,21 @@ This repo works with git LFS, so please install it in order to pull large files!
 ├── runners                   -> scripts to execute experiments according to configs
 ├── run_experiments.py        -> main entrypoint ti trigger simulations
 ├── submodules                -> backbone library for simulations as a submodule
+├── experiments.ipynb         -> doodles
 ├── postprocessing.ipynb      -> script to genreate `all_results.csv`
 ├── all_result_analysis.ipynb -> script to analyse results form base networks
 ├── top_result_analysis.ipynb -> script to analyse results from large networks
-└──  robustness_maps.ipynb    -> script to obtain robustness maps
+└── efficiency_maps.ipynb     -> script to obtain efficiency maps
 ```
 
 ## Executing experiments
 
 To run experiments with execute: `run_experiments.py` and provide proper CLI
 arguments, i.e. a path to configuration file and runner type. See examples in
-'data/example_configs' for inspirations. 
+`_experiments_/examples` for inspirations. 
 
 ## Generating data visualisations
 
-Please run `result_analysis.ipynb` to obtain analysis from performed 
-experiments.
+Please run `postprocessing.ipynb` to convert raw results. Then, depending to the
+stage of the experiments, execute `all_result_analysis.ipynb` or `top_result_analysis.ipynb`
+to obtain analysis from performed experiments.
