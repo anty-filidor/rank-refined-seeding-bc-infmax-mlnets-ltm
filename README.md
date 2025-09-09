@@ -61,3 +61,7 @@ arguments, i.e. a path to configuration file and runner type. See examples in
 Please run `postprocessing.ipynb` to convert raw results. Then, depending to the
 stage of the experiments, execute `all_result_analysis.ipynb` or `top_result_analysis.ipynb`
 to obtain analysis from performed experiments.
+
+## Acknowledgment
+
+This work was supported by the National Science Centre, Poland [grant no. 2022/45/B/ST6/04145] (www.multispread.pwr.edu.pl); the Polish Ministry of Science and Higher Education programme “International Projects Co-Funded”; and the EU under the Horizon Europe [grant no. 101086321]. Views and opinions expressed are those of the authors and do not necessarily reflect those of the funding agencies.
